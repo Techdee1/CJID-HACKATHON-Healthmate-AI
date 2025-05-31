@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthMate AI</title>
+    <link rel="stylesheet" href="chat.css">
+     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    
+    <div class="app-container">
+        <div class="sidebar-overlay"></div>
+
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">HealthMate AI</div>
+                <button class="close-sidebar-button"><i class="fas fa-times"></i></button>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="#" class="nav-item active" data-target-screen="chat-screen"><i class="fas fa-comment"></i> <span>Chat</span></a></li>
+                    <li><a href="#" class="nav-item" data-target-screen="symptoms-history-screen"><i class="fas fa-history"></i> <span>Symptoms History</span></a></li>
+                    <li><a href="#" class="nav-item" data-target-screen="health-facts-screen"><i class="fas fa-newspaper"></i> <span>Health Facts</span></a></li>
+                    <li><a href="#" class="nav-item" data-target-screen="emergency-contacts-screen"><i class="fas fa-phone-alt"></i> <span>Emergency Contacts</span></a></li>
+                    <li><a href="#" class="nav-item" data-target-screen="settings-screen"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <img src="https://via.placeholder.com/30/87CEEB/FFFFFF?text=U" alt="User Avatar" class="avatar">
+                    <span>User Name</span>
+                </div>
+                <button class="logout-button" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </aside>
+        <div class="welcome-screen active-screen">
+            <main class="welcome-content">
+                <button id="start-chat-button" class="cta-button">Start Chat With HealthMate AI</button>
+            </main>
+        </div>
+
+        <div class="chat-screen">
+            <header class="chat-header">
+                <button class="sidebar-toggle-button"><i class="fas fa-bars"></i></button> <div class="user-profile">
+                    <span class="user-name">❤️ HealthMate AI</span>
+                </div>
+                <div class="header-actions">
+                    <button><i class="fas fa-ellipsis-v"></i></button>
+                </div>
+            </header>
+
+            <div class="chat-content">
+                <div class="chat-messages">
+                    </div>
+
+                <div class="prompt-suggestion-area" style="display: none;">
+                    <div class="welcome-prompt-text">
+                        <h2>How are you feeling today?</h2>
+                        <p>Choose a prompt or type your own question.</p>
+                    </div>
+                    <div class="prompt-buttons">
+                        <button class="prompt-button" data-prompt="I have a headache and feel tired.">
+                            <i class="fas fa-head-side-mask"></i> Describe your symptoms
+                        </button>
+                        <button class="prompt-button" data-prompt="What are the common symptoms of the flu?">
+                            <i class="fas fa-virus"></i> What are the common symptoms of the flu?
+                        </button>
+                        <button class="prompt-button" data-prompt="What should I do for a minor cut?">
+                            <i class="fas fa-band-aid"></i> What should I do for a minor cut?
+                        </button>
+                        <button class="prompt-button" data-prompt="Explain what hypertension means.">
+                            <i class="fas fa-question-circle"></i> Explain what hypertension means
+                        </button>
+                    </div>
+                    <button class="refresh-prompts-button">
+                        <i class="fas fa-sync-alt"></i> Refresh Prompts
+                    </button>
+                </div>
+
+                <div class="chat-disclaimer-bar">
+                    ⚠️ AI may be wrong. Always consult a licensed medical professional.
+                </div>
+
+                <div class="loading-diagnosis" style="display: none;">
+                    <div class="loader-animation"></div>
+                    <p>Analyzing your symptoms...</p>
+                </div>
+
+                <div class="diagnosis-panel" style="display: none;">
+                    <div class="panel-header">
+                        <h3 id="diagnosis-panel-title">Diagnosis Result</h3>
+                        <button class="close-panel-button" id="close-diagnosis-panel">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="card-layout">
+                        <div class="condition-prediction">
+                            <span class="label">Likely:</span> <span class="value" id="diagnosis-condition">Migraine</span>
+                        </div>
+                        <div class="triage-level" id="diagnosis-triage">
+                            <span class="level-indicator">🟡</span> Moderate (See doctor within 24 hrs)
+                        </div>
+                        
+                        <div class="urgent-diagnosis-content" id="urgent-diagnosis-content" style="display: none;">
+                            <div class="alert-icon-text">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span class="alert-text">URGENT: Possible signs of Stroke</span>
+                            </div>
+                            <p>Please take immediate action!</p>
+                            <div class="emergency-actions">
+                                <button class="cta-button red" id="call-emergency-button">
+                                    <i class="fas fa-phone-alt"></i> CALL EMERGENCY SERVICES
+                                </button>
+                                <button class="cta-button primary-outline" id="perform-first-aid-button">
+                                    <i class="fas fa-medkit"></i> PERFORM FIRST AID
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="analysis-summary" id="analysis-summary-section">
+                            <h4>Analysis Summary:</h4>
+                            <ul id="analysis-summary-list">
+                                <li>Headache, throbbing, typically on one side.</li>
+                                <li>Sensitivity to light and sound.</li>
+                                <li>Nausea experienced.</li>
+                            </ul>
+                        </div>
+                        <div class="confidence-score" id="confidence-score-section">
+                            Confidence Score: <span id="confidence-value">87%</span>
+                        </div>
+                        <div class="next-steps" id="next-steps-section">
+                            <h4>Next Steps:</h4>
+                            <ul id="next-steps-list">
+                                <li>Rest in a quiet, dark room.</li>
+                                <li>Stay hydrated.</li>
+                                <li>Consider over-the-counter pain relievers.</li>
+                            </ul>
+                            <button class="action-button">Book Consultation</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="chat-input-area">
+                <button id="reopen-panel-button" class="reopen-button" style="display: none;">
+                    <i class="fas fa-chart-bar"></i> View Diagnosis
+                </button>
+                <div class="input-wrapper">
+                    <input type="text" id="chat-input" placeholder="Type your symptoms or question...">
+                    <button id="send-button"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="first-aid-screen app-screen">
+            <header class="app-header">
+                <button class="back-button"><i class="fas fa-arrow-left"></i></button>
+                <div class="logo">First Aid Guide</div>
+            </header>
+            <main class="first-aid-content screen-content">
+                <h2>Immediate Action: Suspected Stroke</h2>
+                <div class="aid-steps">
+                    <p>Remember the **FAST** acronym:</p>
+                    <p>
+                        <strong>F</strong>ace drooping – Does one side of the face droop or is it numb? Ask the person to smile.<br>
+                        <strong>A</strong>rm weakness – Is one arm weak or numb? Ask the person to raise both arms. Does one arm drift downward?<br>
+                        <strong>S</strong>peech difficulty – Is speech slurred, are they unable to speak, or are they hard to understand? Ask the person to repeat a simple sentence, like “The sky is blue.”<br>
+                        <strong>T</strong>ime to call 911 (or local emergency number) – If anyone shows any of these symptoms, even if the symptoms go away, call emergency services immediately.
+                    </p>
+                    <h3>While waiting for help:</h3>
+                    <ul>
+                        <li>Keep the person calm and comfortable.</li>
+                        <li>Do not give them anything to eat or drink.</li>
+                        <li>Loosen tight clothing around their neck.</li>
+                        <li>If unconscious, roll them onto their side (recovery position) to prevent choking.</li>
+                    </ul>
+                </div>
+            </main>
+        </div>
+
+        <div class="symptoms-history-screen app-screen">
+            <header class="app-header">
+                <button class="back-button"><i class="fas fa-arrow-left"></i></button>
+                <div class="logo">Symptoms History</div>
+            </header>
+            <main class="screen-content">
+                <h2>Your Past Symptom Checks</h2>
+                <p>This is where you'd see a list of your previous symptom checks and their outcomes.</p>
+                <div class="history-list">
+                    <div class="history-item">
+                        <h4>Headache & Fatigue</h4>
+                        <p>Date: 2025-05-28 | Diagnosis: Migraine | Triage: Moderate</p>
+                    </div>
+                    <div class="history-item">
+                        <h4>Minor Cut on Hand</h4>
+                        <p>Date: 2025-05-25 | Diagnosis: Minor Injury | Triage: Mild</p>
+                    </div>
+                    <div class="history-item">
+                        <h4>Seasonal Allergies</h4>
+                        <p>Date: 2025-05-20 | Diagnosis: Allergic Rhinitis | Triage: Mild</p>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <div class="health-facts-screen app-screen">
+            <header class="app-header">
+                <button class="back-button"><i class="fas fa-arrow-left"></i></button>
+                <div class="logo">Health Facts</div>
+            </header>
+            <main class="screen-content">
+                <h2>Explore Health Articles</h2>
+                <p>Dive into interesting and useful health facts.</p>
+                <div class="article-list">
+                    <div class="article-card">
+                        <h3>Understanding Hypertension</h3>
+                        <p>Learn about high blood pressure, its causes, symptoms, and management.</p>
+                        <a href="#" class="read-more-link">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <div class="article-card">
+                        <h3>Benefits of Hydration</h3>
+                        <p>Discover why staying hydrated is crucial for your overall health.</p>
+                        <a href="#" class="read-more-link">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <div class="article-card">
+                        <h3>The Importance of Sleep</h3>
+                        <p>How quality sleep affects your physical and mental well-being.</p>
+                        <a href="#" class="read-more-link">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <div class="emergency-contacts-screen app-screen">
+            <header class="app-header">
+                <button class="back-button"><i class="fas fa-arrow-left"></i></button>
+                <div class="logo">Emergency Contacts</div>
+            </header>
+            <main class="screen-content">
+                <h2>Your Emergency Contacts</h2>
+                <p>Quickly access your saved emergency numbers.</p>
+                <div class="contact-list">
+                    <div class="contact-item">
+                        <h4>Primary Doctor</h4>
+                        <p>Dr. Emily White</p>
+                        <a href="tel:+1234567890"><i class="fas fa-phone"></i> +1 (234) 567-890</a>
+                    </div>
+                    <div class="contact-item">
+                        <h4>Family Member</h4>
+                        <p>Jane Doe</p>
+                        <a href="tel:+1987654321"><i class="fas fa-phone"></i> +1 (987) 654-321</a>
+                    </div>
+                    <div class="contact-item">
+                        <h4>Local Emergency</h4>
+                        <p>Ambulance/Fire/Police</p>
+                        <a href="tel:911"><i class="fas fa-phone"></i> 911 (US/Canada)</a>
+                    </div>
+                </div>
+                <button class="cta-button primary-outline add-contact-button"><i class="fas fa-plus"></i> Add New Contact</button>
+            </main>
+        </div>
+
+        <div class="settings-screen app-screen">
+            <header class="app-header">
+                <button class="back-button"><i class="fas fa-arrow-left"></i></button>
+                <div class="logo">Settings</div>
+            </header>
+            <main class="screen-content">
+                <h2>App Settings</h2>
+                <p>Customize your HealthMate AI experience.</p>
+                <ul class="settings-list">
+                    <li><i class="fas fa-bell"></i> Notification Preferences</li>
+                    <li><i class="fas fa-user-shield"></i> Privacy Policy</li>
+                    <li><i class="fas fa-info-circle"></i> About HealthMate AI</li>
+                </ul>
+            </main>
+        </div>
+    </div>
+
+    <script src="chatbot.js"></script>
+</body>
+</html>
