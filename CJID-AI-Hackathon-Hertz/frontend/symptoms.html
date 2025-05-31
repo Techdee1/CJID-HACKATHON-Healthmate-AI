@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Check Symptoms - HealthMate AI</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="symptoms.css" />
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="main-nav">
+    <div class="nav-brand">❤️ HealthMate AI</div>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="symptoms.html" class="active">Symptoms</a>
+      <a href="tips.html">Tips</a>
+      <a href="awareness.html">Awareness</a>
+      <a href="quiz.html">Quiz</a>
+      <a href="history.html">History</a>
+      <a href="chat.html">Chat</a>
+    </nav>
+    <div class="nav-toggle" onclick="toggleSidebar()">☰</div>
+  </header>
+
+  <div id="sidebar" class="sidebar">
+    <div style="padding: 20px 0;">❤️ HealthMate AI</div>
+    <a href="index.html">Home</a>
+    <a href="symptoms.html" class="active">Symptoms</a>
+    <a href="tips.html">Tips</a>
+    <a href="awareness.html">Awareness</a>
+    <a href="quiz.html">Quiz</a>
+    <a href="history.html">History</a>
+    <a href="chat.html">Chat</a>
+  </div>
+
+  <main class="screen">
+    <div class="symptom-checker-container">
+      <section class="checker-section">
+        <h1 class="page-title">Check Your Symptoms</h1>
+        <p class="subtitle">Describe your symptoms below for a preliminary health assessment</p>
+        
+        <div class="input-container">
+          <textarea 
+            id="symptomInput" 
+            class="symptom-input" 
+            placeholder="Describe how you feel... (e.g., 'I have had a headache and fever for two days')"></textarea>
+          
+          <div class="input-controls">
+            <button id="clearButton" class="clear-button" type="button">Clear</button>
+            <button id="checkButton" class="check-button primary-button" onclick="checkSymptoms()">
+              <span class="button-icon">🔍</span> Check Symptoms
+            </button>
+          </div>
+        </div>
+
+        <div id="symptomResults" class="results-container hidden">
+          <!-- Results will be inserted here by JavaScript -->
+        </div>
+      </section>
+
+      <section class="tips-section">
+        <h2>Health Tips <span class="tips-badge">Always Good to Know</span></h2>
+        
+        <div class="tips-grid">
+          <div class="tip-card">
+            <div class="tip-icon">💧</div>
+            <div class="tip-content">
+              <h3>Stay Hydrated</h3>
+              <p>Drink plenty of water throughout the day. Aim for 8 glasses to maintain proper bodily functions.</p>
+            </div>
+          </div>
+          
+          <div class="tip-card">
+            <div class="tip-icon">🛏️</div>
+            <div class="tip-content">
+              <h3>Get Plenty of Rest</h3>
+              <p>Adults need 7-9 hours of quality sleep daily for physical recovery and mental health.</p>
+            </div>
+          </div>
+          
+          <div class="tip-card">
+            <div class="tip-icon">🥗</div>
+            <div class="tip-content">
+              <h3>Balanced Nutrition</h3>
+              <p>Include fruits, vegetables, lean proteins, and whole grains in your daily meals.</p>
+            </div>
+          </div>
+          
+          <div class="tip-card">
+            <div class="tip-icon">🚶</div>
+            <div class="tip-content">
+              <h3>Regular Exercise</h3>
+              <p>Aim for at least 30 minutes of moderate activity most days of the week.</p>
+            </div>
+          </div>
+        </div>
+        
+        <a class="view-all-link" href="tips.html">
+          View All Health Tips
+          <span class="arrow-icon">→</span>
+        </a>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>HealthMate AI &copy; 2025 | Always consult a medical professional for health concerns</p>
+  </footer>
+
+  <script src="app.js"></script>
+  <script>
+    // Clear button functionality
+    document.getElementById('clearButton').addEventListener('click', function() {
+      document.getElementById('symptomInput').value = '';
+      document.getElementById('symptomResults').classList.add('hidden');
+    });
+    
+    // Toggle sidebar function
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const screen = document.querySelector('.screen');
+      sidebar.classList.toggle('open');
+      screen.classList.toggle('sidebar-open');
+    }
+  </script>
+</body>
+</html>

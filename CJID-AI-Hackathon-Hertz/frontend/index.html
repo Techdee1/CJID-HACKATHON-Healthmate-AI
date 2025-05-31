@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HealthMate AI - Your Everyday Health Companion</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="index.css" />
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- FontAwesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+<body>
+  <div class="sidebar-overlay"></div>
+  
+  <header class="main-nav">
+    <div class="nav-brand">
+      <div class="brand-container">
+        <span class="logo-icon">❤️</span>
+        <span class="brand-text">HealthMate AI</span>
+      </div>
+      <div class="disclaimer-text">Powered by AI, Not a Doctor</div>
+    </div>
+    <nav class="nav-links">
+      <a href="index.html" class="active">Home</a>
+      <a href="symptoms.html">Symptoms</a>
+      <a href="tips.html">Tips</a>
+      <a href="awareness.html">Awareness</a>
+      <a href="quiz.html">Quiz</a>
+      <a href="history.html">History</a>
+      <a href="chat.html">Chat</a>
+    </nav>
+    <div class="nav-toggle" onclick="toggleSidebar()">☰</div>
+  </header>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-header">
+      <span class="sidebar-logo">❤️</span>
+      <span class="sidebar-title">HealthMate AI</span>
+      <span class="sidebar-close" onclick="toggleSidebar()">×</span>
+    </div>
+    <nav class="sidebar-links">
+      <a href="index.html" class="active"><i class="fas fa-home"></i> Home</a>
+      <a href="symptoms.html"><i class="fas fa-stethoscope"></i> Symptoms</a>
+      <a href="tips.html"><i class="fas fa-lightbulb"></i> Tips</a>
+      <a href="awareness.html"><i class="fas fa-book-medical"></i> Awareness</a>
+      <a href="quiz.html"><i class="fas fa-question-circle"></i> Quiz</a>
+      <a href="history.html"><i class="fas fa-chart-line"></i> History</a>
+      <a href="chat.html"><i class="fas fa-comment-medical"></i> Chat</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <img src="https://via.placeholder.com/30/87CEEB/FFFFFF?text=U" alt="User Avatar" class="avatar">
+        <span>Guest User</span>
+      </div>
+      <a href="login.html" class="login-button" title="Login"><i class="fas fa-sign-in-alt"></i></a>
+    </div>
+  </aside>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <div class="hero-logo">
+          <div class="logo-pulse">❤️</div>
+        </div>
+        <h1>HealthMate AI</h1>
+        <p class="hero-subtitle">Your Intelligent Symptom Companion</p>
+        <p class="hero-description">Get quick, AI-powered insights into your symptoms. Always consult a licensed medical professional for diagnosis and treatment.</p>
+        <a href="chat.html" class="cta-button">
+          Start Chat With HealthMate AI
+          <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+      <div class="container">
+        <h2 class="section-title">How We Help You</h2>
+        <p class="section-subtitle">Explore our personalized health services</p>
+        
+        <div class="feature-cards">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-stethoscope"></i>
+            </div>
+            <h3>Check Symptoms</h3>
+            <p>Analyze your symptoms and get AI-powered health insights</p>
+            <a href="symptoms.html" class="feature-link">Get Analysis <i class="fas fa-chevron-right"></i></a>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-lightbulb"></i>
+            </div>
+            <h3>Health Tips</h3>
+            <p>Discover practical tips to improve your everyday wellbeing</p>
+            <a href="tips.html" class="feature-link">View Tips <i class="fas fa-chevron-right"></i></a>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-book-medical"></i>
+            </div>
+            <h3>Health Awareness</h3>
+            <p>Learn about important health topics and prevention strategies</p>
+            <a href="awareness.html" class="feature-link">Learn More <i class="fas fa-chevron-right"></i></a>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-comment-medical"></i>
+            </div>
+            <h3>Health Chat</h3>
+            <p>Ask questions and get personalized health guidance</p>
+            <a href="chat.html" class="feature-link">Start Chatting <i class="fas fa-chevron-right"></i></a>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Trust Section -->
+    <section class="trust-section">
+      <div class="container">
+        <div class="trust-content">
+          <h2>Your Health Is Our Priority</h2>
+          <p>HealthMate AI provides information to help you make better health decisions. While we use advanced AI technology, always consult healthcare professionals for medical advice.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Emergency Resources Section -->
+    <section class="emergency-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Emergency Resources</h2>
+          <p class="section-subtitle">Quick access to important health contacts</p>
+          <div class="section-divider">
+            <span class="divider-accent"></span>
+          </div>
+        </div>
+        
+        <div class="emergency-cards">
+          <div class="emergency-card">
+            <div class="card-icon-wrapper">
+              <div class="card-icon emergency-icon">
+                <i class="fas fa-phone-alt"></i>
+              </div>
+            </div>
+            <div class="card-content">
+              <h3 class="card-title">Emergency Services</h3>
+              <p class="card-description">Immediate assistance for life-threatening situations</p>
+              <a href="#" class="cta-button emergency-cta">
+                <span class="emergency-number">[EMERGENCY NUMBER]</span>
+                <span class="cta-label">Call Now</span>
+              </a>
+            </div>
+          </div>
+          
+          <div class="emergency-card">
+            <div class="card-icon-wrapper">
+              <div class="card-icon guide-icon">
+                <i class="fas fa-first-aid"></i>
+              </div>
+            </div>
+            <div class="card-content">
+              <h3 class="card-title">First Aid Guides</h3>
+              <p class="card-description">Step-by-step instructions for common emergency situations</p>
+              <a href="#" class="feature-link">
+                View Guides <i class="fas fa-chevron-right"></i>
+              </a>
+            </div>
+          </div>
+          
+          <div class="emergency-card">
+            <div class="card-icon-wrapper">
+              <div class="card-icon hospital-icon">
+                <i class="fas fa-hospital"></i>
+              </div>
+            </div>
+            <div class="card-content">
+              <h3 class="card-title">Find Hospitals</h3>
+              <p class="card-description">Locate nearby healthcare facilities and emergency rooms</p>
+              <a href="#" class="feature-link">
+                Find Nearby <i class="fas fa-chevron-right"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <span class="footer-logo">❤️</span>
+          <span class="footer-brand-text">HealthMate AI</span>
+        </div>
+        <div class="footer-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Contact Us</a>
+        </div>
+      </div>
+      <div class="copyright">
+        <p>&copy; 2025 HealthMate AI. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

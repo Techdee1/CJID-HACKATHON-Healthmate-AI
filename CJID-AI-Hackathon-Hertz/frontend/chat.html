@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chat with HealthMate AI</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="chat.css" />
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- FontAwesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+<body>
+  <div class="sidebar-overlay"></div>
+
+  <header class="main-nav">
+    <div class="nav-brand">
+      <span class="logo-icon">❤️</span>
+      <span class="brand-text">HealthMate AI</span>
+    </div>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="symptoms.html">Symptoms</a>
+      <a href="tips.html">Tips</a>
+      <a href="awareness.html">Awareness</a>
+      <a href="quiz.html">Quiz</a>
+      <a href="history.html">History</a>
+      <a href="chat.html" class="active">Chat</a>
+    </nav>
+    <div class="nav-toggle" onclick="toggleSidebar()">☰</div>
+  </header>
+
+  <main class="chat-screen">
+    <div class="chat-header">
+      <div class="user-profile">
+        <img src="https://via.placeholder.com/40/87CEEB/FFFFFF?text=AI" alt="AI Avatar" class="avatar">
+        <span class="user-name">HealthMate AI</span>
+      </div>
+      <div class="header-actions">
+        <button id="chat-options-button"><i class="fas fa-ellipsis-v"></i></button>
+      </div>
+    </div>
+
+    <div class="chat-content">
+      <div id="chatWindow" class="chat-messages">
+        <!-- Messages will be added here dynamically -->
+      </div>
+
+      <div class="prompt-suggestion-area">
+        <div class="welcome-prompt-text">
+          <h2>How are you feeling today?</h2>
+          <p>Choose a prompt or type your own question.</p>
+        </div>
+        <div class="prompt-buttons">
+          <button class="prompt-button" data-prompt="I have a headache and feel tired.">
+            <i class="fas fa-head-side-mask"></i> Describe your symptoms
+          </button>
+          <button class="prompt-button" data-prompt="What are the common symptoms of the flu?">
+            <i class="fas fa-virus"></i> What are the common symptoms of the flu?
+          </button>
+          <button class="prompt-button" data-prompt="What should I do for a minor cut?">
+            <i class="fas fa-band-aid"></i> What should I do for a minor cut?
+          </button>
+          <button class="prompt-button" data-prompt="Explain what hypertension means.">
+            <i class="fas fa-question-circle"></i> Explain what hypertension means
+          </button>
+        </div>
+        <button class="refresh-prompts-button">
+          <i class="fas fa-sync-alt"></i> Refresh Prompts
+        </button>
+      </div>
+
+      <div class="chat-disclaimer-bar">
+        ⚠️ AI may be wrong. Always consult a licensed medical professional.
+      </div>
+
+      <div class="loading-diagnosis" style="display: none;">
+        <div class="loader-animation"></div>
+        <p>Analyzing your symptoms...</p>
+      </div>
+
+      <div class="diagnosis-panel" style="display: none;">
+        <div class="panel-header">
+          <h3 id="diagnosis-panel-title">Diagnosis Result</h3>
+          <button class="close-panel-button" id="close-diagnosis-panel">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="card-layout">
+          <div class="condition-prediction">
+            <span class="label">Likely:</span> <span class="value" id="diagnosis-condition">Migraine</span>
+          </div>
+          <div class="triage-level" id="diagnosis-triage">
+            <span class="level-indicator">🟡</span> Moderate (See doctor within 24 hrs)
+          </div>
+          
+          <div class="urgent-diagnosis-content" id="urgent-diagnosis-content" style="display: none;">
+            <div class="alert-icon-text">
+              <i class="fas fa-exclamation-triangle"></i>
+              <span class="alert-text">URGENT: Possible signs of Stroke</span>
+            </div>
+            <p>Please take immediate action!</p>
+            <div class="emergency-actions">
+              <button class="cta-button red" id="call-emergency-button">
+                <i class="fas fa-phone-alt"></i> CALL EMERGENCY SERVICES
+              </button>
+              <button class="cta-button primary-outline" id="perform-first-aid-button">
+                <i class="fas fa-medkit"></i> PERFORM FIRST AID
+              </button>
+            </div>
+          </div>
+
+          <div class="analysis-summary" id="analysis-summary-section">
+            <h4>Analysis Summary:</h4>
+            <ul id="analysis-summary-list">
+              <li>Headache, throbbing, typically on one side.</li>
+              <li>Sensitivity to light and sound.</li>
+              <li>Nausea experienced.</li>
+            </ul>
+          </div>
+          <div class="confidence-score" id="confidence-score-section">
+            Confidence Score: <span id="confidence-value">87%</span>
+          </div>
+          <div class="next-steps" id="next-steps-section">
+            <h4>Next Steps:</h4>
+            <ul id="next-steps-list">
+              <li>Rest in a quiet, dark room.</li>
+              <li>Stay hydrated.</li>
+              <li>Consider over-the-counter pain relievers.</li>
+            </ul>
+            <button class="action-button">Book Consultation</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-input-area">
+      <button id="reopen-panel-button" class="reopen-button" style="display: none;">
+        <i class="fas fa-chart-bar"></i> View Diagnosis
+      </button>
+      <div class="input-wrapper">
+        <input type="text" id="userInput" placeholder="Type your symptoms or question...">
+        <button id="sendBtn"><i class="fas fa-paper-plane"></i></button>
+      </div>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+  <script src="chatbot.js"></script>
+</body>
+</html>
