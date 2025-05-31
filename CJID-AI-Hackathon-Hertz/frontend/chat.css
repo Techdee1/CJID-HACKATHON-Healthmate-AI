@@ -1,0 +1,1456 @@
+/* ... (existing CSS remains the same above this) ... */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+    --primary-blue: #2db36f;; /* A calming blue */
+    --secondary-green: #50e3c2; /* A calming green */
+    --light-blue: #e6f2ff;
+    --light-green: #e6fff2;
+    --text-color: #333;
+    --grey-text: #666;
+    --light-grey: #f0f2f5;
+    --border-color: #e0e0e0;
+    --user-bubble-bg: var(--primary-blue);
+    --user-bubble-text: #fff;
+    --ai-bubble-bg: #fff;
+    --ai-bubble-border: #e0e0e0;
+    --ai-bubble-text: #333;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --urgent-red: #d0021b;
+    --urgent-light-red: #ffebeb; /* Lighter red for background */
+    --moderate-orange: #f5a623;
+    --moderate-light-orange: #fff8e6;
+    --mild-green: #7ed321;
+    --mild-light-green: #effde6;
+}
+
+:root {
+    --primary-blue: #2db36f;; /* Deep Sky Blue */
+    --light-blue: #e0f2f7;   /* Lighter Blue */
+    --text-color: #333;
+    --grey-text: #666;
+    --border-color: #ddd;
+    --background-color: #f0f8ff; /* Alice Blue */
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --warning-red: #e74c3c;
+    --urgent-red: #c0392b;
+    --success-green: #27ae60;
+    --warning-orange: #f39c12;
+    --panel-bg-color: #ffffff;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--light-grey);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: var(--text-color);
+    overflow: hidden; /* Prevent body scroll when app-container is 100vh */
+}
+
+.app-container {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    width: 90%;
+    max-width: 800px;
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative; /* For absolute positioning of screens */
+}
+
+/* Base screen styles */
+.welcome-screen, .chat-screen, .first-aid-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.5s ease-in-out;
+    background-color: #fff; /* Ensure they have a background */
+}
+
+/* Default state: All screens hidden except welcome */
+.welcome-screen {
+    transform: translateX(100%); /* Start off-screen by default */
+}
+.chat-screen {
+    transform: translateX(100%); /* Start off-screen by default */
+}
+.first-aid-screen {
+    transform: translateX(100%); /* Start off-screen by default */
+}
+
+
+/* Active state: Bring screen into view */
+.welcome-screen.active-screen {
+    transform: translateX(0);
+    z-index: 2; /* Bring to front */
+}
+
+.chat-screen.active-screen {
+    transform: translateX(0);
+    z-index: 2;
+}
+
+.first-aid-screen.active-screen {
+    transform: translateX(0);
+    z-index: 3; /* Highest z-index for first aid */
+}
+
+/* Header for all screens */
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border-color);
+    background-color: #fff;
+    flex-shrink: 0;
+}
+
+.app-header .logo {
+    font-weight: 700;
+    font-size: 1.4em;
+    color: var(--primary-blue);
+}
+
+.app-header .disclaimer {
+    font-size: 0.85em;
+    color: var(--grey-text);
+}
+
+/* Welcome Screen Specifics */
+.welcome-screen {
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+}
+
+.welcome-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.welcome-icon {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 30px;
+    animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.welcome-content h1 {
+    font-size: 2.2em;
+    font-weight: 700;
+    color: var(--primary-blue);
+    margin-bottom: 15px;
+}
+
+.welcome-content p {
+    font-size: 1em;
+    color: var(--grey-text);
+    max-width: 500px;
+    line-height: 1.6;
+    margin-bottom: 40px;
+}
+
+.cta-button {
+    background-color: var(--primary-blue);
+    color: #fff;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 30px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    box-shadow: var(--shadow);
+}
+
+.cta-button:hover {
+    background-color: #2db36f;; /* Darker blue */
+}
+
+.cta-button:active {
+    transform: scale(0.98);
+}
+
+/* New: Outline button style */
+.cta-button.primary-outline {
+    background-color: transparent;
+    color: var(--primary-blue);
+    border: 2px solid var(--primary-blue);
+    box-shadow: none;
+}
+
+.cta-button.primary-outline:hover {
+    background-color: var(--primary-blue);
+    color: #fff;
+}
+
+
+/* Chat Header (reused from previous, slightly adapted) */
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border-color);
+    background-color: #fff;
+    flex-shrink: 0;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+}
+
+.user-profile .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover;
+    background-color: var(--secondary-green); /* AI avatar color */
+}
+
+.user-profile .user-name {
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.header-actions button {
+    background: none;
+    border: none;
+    font-size: 1.2em;
+    color: #888;
+    cursor: pointer;
+    margin-left: 15px;
+    transition: color 0.2s ease;
+}
+
+.header-actions button:hover {
+    color: var(--primary-blue);
+}
+
+/* Chat Content Area */
+.chat-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative; /* For absolute positioning of panels */
+    overflow: hidden; /* To handle internal scrolling */
+}
+
+.chat-messages {
+    flex-grow: 1; /* Takes available space */
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 20px;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+.chat-messages::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+}
+
+.message-bubble {
+    max-width: 75%;
+    padding: 12px 18px;
+    border-radius: 18px;
+    line-height: 1.5;
+    word-wrap: break-word;
+    font-size: 0.95em;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.message-bubble.user {
+    background-color: var(--user-bubble-bg);
+    color: var(--user-bubble-text);
+    align-self: flex-end; /* Align to the right */
+    border-bottom-right-radius: 4px;
+}
+
+.message-bubble.ai {
+    background-color: var(--ai-bubble-bg);
+    color: var(--ai-bubble-text);
+    border: 1px solid var(--ai-bubble-border);
+    align-self: flex-start; /* Align to the left */
+    border-bottom-left-radius: 4px;
+}
+
+.initial-ai-message {
+    margin-top: auto; /* Push to bottom initially for chat-like appearance */
+}
+
+/* Chat Disclaimer Bar */
+.chat-disclaimer-bar {
+    background-color: #fff;
+    color: var(--grey-text);
+    font-size: 0.8em;
+    padding: 10px 20px;
+    text-align: center;
+    border-top: 1px solid var(--border-color);
+    flex-shrink: 0;
+}
+
+/* Chat Input Area */
+.chat-input-area {
+    padding: 15px 20px;
+    border-top: 1px solid var(--border-color);
+    background-color: #fff;
+    flex-shrink: 0;
+    position: relative; /* For positioning reopen button */
+}
+
+.input-wrapper {
+    display: flex;
+    align-items: center;
+    background-color: var(--light-grey);
+    border-radius: 25px;
+    padding: 8px 15px;
+    border: 1px solid var(--border-color);
+}
+
+#chat-input {
+    flex-grow: 1;
+    border: none;
+    background: none;
+    padding: 8px 10px;
+    font-size: 1em;
+    outline: none;
+    color: var(--text-color);
+}
+
+#chat-input::placeholder {
+    color: #999;
+}
+
+#send-button {
+    background-color: var(--primary-blue);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 1.1em;
+    margin-left: 10px;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+#send-button:hover {
+    background-color: #2db36f;;
+}
+
+#send-button:active {
+    transform: scale(0.95);
+}
+
+/* Reopen Panel Button */
+.reopen-button {
+    position: absolute;
+    bottom: 70px; /* Adjust based on input area height */
+    right: 20px;
+    background-color: var(--primary-blue);
+    color: #fff;
+    padding: 8px 15px;
+    border-radius: 20px;
+    border: none;
+    font-size: 0.9em;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+    z-index: 10; /* Ensure it's above other elements */
+}
+
+.reopen-button:hover {
+    background-color: #2db36f;;
+    transform: translateY(-2px);
+}
+
+
+/* Loading Diagnosis State */
+.loading-diagnosis {
+    position: absolute; /* Position over chat messages */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%; /* Cover entire chat content area */
+    background-color: rgba(255, 255, 255, 0.95); /* Semi-transparent white overlay */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10; /* Above chat messages but below panels */
+    text-align: center;
+    padding-bottom: 60px; /* Space for disclaimer/input */
+}
+
+.loader-animation {
+    width: 60px;
+    height: 60px;
+    border: 6px solid var(--primary-blue);
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-diagnosis p {
+    font-size: 1.1em;
+    color: var(--grey-text);
+    font-weight: 500;
+}
+
+/* Diagnosis Result Panel */
+.diagnosis-panel {
+    position: absolute;
+    bottom: 0; /* Appears from the bottom */
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    border-top: 1px solid var(--border-color);
+    padding: 20px;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+    transform: translateY(100%); /* Hidden by default */
+    transition: transform 0.4s ease-out;
+    z-index: 15; /* Above loading and chat messages */
+    max-height: 80%; /* Don't cover entire chat */
+    overflow-y: auto; /* If content is too long */
+    display: flex;
+    flex-direction: column;
+}
+
+.diagnosis-panel.active {
+    transform: translateY(0);
+}
+
+.diagnosis-panel .panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.diagnosis-panel h3 {
+    font-size: 1.4em;
+    color: var(--primary-blue);
+    text-align: center;
+    flex-grow: 1;
+}
+
+/* Reusable close button style for both panels */
+.close-panel-button {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    color: var(--grey-text);
+    cursor: pointer;
+    transition: color 0.2s ease;
+    padding: 5px;
+}
+
+.close-panel-button:hover {
+    color: var(--urgent-red);
+}
+
+/* Triage Level Colors */
+.triage-level {
+    font-size: 1.1em;
+    font-weight: 500;
+    padding: 8px 12px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    color: #333;
+}
+
+.triage-level .level-indicator {
+    font-size: 1.2em;
+    margin-right: 5px;
+}
+
+.triage-level.urgent { background-color: var(--urgent-light-red); color: var(--urgent-red); }
+.triage-level.urgent .level-indicator { color: var(--urgent-red); }
+
+.triage-level.moderate { background-color: var(--moderate-light-orange); color: #c08b00; }
+.triage-level.moderate .level-indicator { color: var(--moderate-orange); }
+
+.triage-level.mild { background-color: var(--mild-light-green); color: #5a9e1b; }
+.triage-level.mild .level-indicator { color: var(--mild-green); }
+
+
+.diagnosis-panel .card-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    border-radius: 10px;
+    background-color: var(--light-blue);
+    padding: 20px;
+}
+
+.diagnosis-panel .condition-prediction {
+    font-size: 1.3em;
+    font-weight: 600;
+    color: var(--text-color);
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.diagnosis-panel .condition-prediction .value {
+    color: var(--primary-blue);
+}
+
+.diagnosis-panel .analysis-summary h4,
+.diagnosis-panel .next-steps h4 {
+    font-size: 1em;
+    color: var(--primary-blue);
+    margin-bottom: 8px;
+}
+
+.diagnosis-panel .analysis-summary ul,
+.diagnosis-panel .next-steps ul {
+    list-style-type: disc;
+    margin-left: 20px;
+    color: var(--grey-text);
+    font-size: 0.9em;
+}
+
+.diagnosis-panel .confidence-score {
+    font-size: 0.95em;
+    color: var(--grey-text);
+    font-weight: 500;
+}
+
+.diagnosis-panel .action-button {
+    background-color: var(--secondary-green);
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background-color 0.3s ease;
+}
+
+.diagnosis-panel .action-button:hover {
+    background-color: #43c19e;
+}
+
+
+/* NEW: Styles for integrated urgent content within diagnosis panel */
+.diagnosis-panel.urgent {
+    border-left: 8px solid var(--urgent-red); /* Prominent left border */
+    background-color: var(--urgent-light-red); /* Subtle light red background tint */
+    /* Adjust border-top to match if desired, or let it be absorbed by the left border */
+}
+
+.diagnosis-panel.urgent .panel-header h3 {
+    color: var(--urgent-red); /* Make the header text red */
+}
+
+.diagnosis-panel.urgent .card-layout {
+    background-color: transparent; /* No blue background for urgent content area */
+    padding: 0; /* Adjust padding if needed */
+}
+
+.urgent-diagnosis-content {
+    /* This will be shown/hidden by JS */
+    display: none; /* Hidden by default */
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    margin-bottom: 20px; /* Space below urgent section */
+    border-radius: 10px; /* Match other card styles if desired */
+    border: 1px solid var(--urgent-red); /* Add a subtle border around the urgent content */
+    background-color: #fff; /* White background for the alert card itself */
+    box-shadow: 0 2px 8px rgba(208, 2, 27, 0.1); /* Subtle shadow for the card */
+}
+
+.urgent-diagnosis-content .alert-icon-text {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--urgent-red);
+}
+
+.urgent-diagnosis-content .fas {
+    font-size: 2.8em; /* Make the icon prominent */
+}
+
+.urgent-diagnosis-content .alert-text {
+    font-size: 1.6em; /* Slightly smaller for better fit */
+    font-weight: 700;
+    text-align: center;
+}
+
+.urgent-diagnosis-content p {
+    font-size: 1.1em;
+    color: var(--urgent-red);
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.urgent-diagnosis-content .emergency-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    width: 100%;
+}
+
+.cta-button.red {
+    background-color: var(--urgent-red);
+    color: #fff;
+    font-size: 1.2em;
+    padding: 15px 30px;
+    border-radius: 30px;
+    box-shadow: 0 4px 10px rgba(208, 2, 27, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cta-button.red:hover {
+    background-color: #a60117;
+}
+
+/* Adjust primary-outline for emergency context */
+.emergency-actions .cta-button.primary-outline {
+    border-color: var(--urgent-red);
+    color: var(--urgent-red);
+    font-size: 1.1em;
+    padding: 15px 25px;
+}
+
+.emergency-actions .cta-button.primary-outline:hover {
+    background-color: var(--urgent-red);
+    color: #fff;
+}
+
+
+/* First Aid Guide Screen */
+.first-aid-screen .app-header {
+    justify-content: flex-start;
+}
+
+.first-aid-screen .app-header .back-button {
+    background: none;
+    border: none;
+    color: var(--primary-blue);
+    font-size: 1em;
+    margin-left: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 500;
+}
+.first-aid-screen .app-header .back-button:hover {
+    text-decoration: underline;
+}
+
+
+.first-aid-content {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background-color: var(--light-blue);
+    color: var(--text-color);
+}
+
+.first-aid-content h2 {
+    color: var(--urgent-red);
+    font-size: 1.8em;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.aid-steps {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    line-height: 1.7;
+    color: var(--grey-text);
+}
+
+.aid-steps p {
+    margin-bottom: 15px;
+}
+
+.aid-steps h3 {
+    color: var(--primary-blue);
+    margin-top: 25px;
+    margin-bottom: 10px;
+}
+
+.aid-steps ul {
+    list-style-type: decimal;
+    margin-left: 20px;
+}
+
+.aid-steps li {
+    margin-bottom: 8px;
+}
+
+/* Media Queries for responsiveness */
+@media (max-width: 768px) {
+    .app-container {
+        width: 100%;
+        height: 100vh;
+        border-radius: 0;
+    }
+
+    .app-header .disclaimer {
+        font-size: 0.75em;
+        text-align: right;
+    }
+
+    .welcome-content h1 {
+        font-size: 1.8em;
+    }
+
+    .welcome-content p {
+        font-size: 0.9em;
+    }
+
+    .cta-button {
+        padding: 12px 25px;
+        font-size: 1em;
+    }
+
+    .message-bubble {
+        max-width: 90%;
+        font-size: 0.9em;
+    }
+
+    .diagnosis-panel {
+        max-height: 90%;
+    }
+
+    .diagnosis-panel h3 {
+        font-size: 1.2em;
+    }
+
+    .diagnosis-panel .condition-prediction {
+        font-size: 1.1em;
+    }
+
+    /* Adjust integrated urgent content for smaller screens */
+    .urgent-diagnosis-content .alert-text {
+        font-size: 1.4em;
+    }
+
+    .emergency-actions .cta-button.red,
+    .emergency-actions .cta-button.primary-outline {
+        font-size: 1em;
+        padding: 12px 20px;
+        width: calc(50% - 7.5px); /* Two buttons side-by-side */
+    }
+
+    .reopen-button {
+        padding: 6px 12px;
+        font-size: 0.8em;
+        bottom: 60px;
+    }
+
+}
+
+/* ... (existing CSS remains the same above this) ... */
+
+/* NEW: Prompt Suggestion Area */
+.prompt-suggestion-area {
+   display: none; /* Will be toggled by JS */
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    padding-top: 30px; /* Add some top padding */
+    background-color: #fff;
+    text-align: center;
+    overflow-y: auto; /* Enable scroll if prompts are too many */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+
+.prompt-suggestion-area::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+}
+
+.prompt-suggestion-area .welcome-prompt-text {
+    margin-bottom: 30px;
+    color: var(--text-color);
+}
+
+.prompt-suggestion-area .welcome-prompt-text h2 {
+    font-size: 2em;
+    font-weight: 700;
+    color: var(--primary-blue);
+    margin-bottom: 10px;
+}
+
+.prompt-suggestion-area .welcome-prompt-text p {
+    font-size: 1.1em;
+    color: var(--grey-text);
+}
+
+.prompt-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    max-width: 500px; /* Constrain width of buttons */
+    margin-bottom: 30px;
+}
+
+.prompt-button {
+    background-color: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 15px 20px;
+    font-size: 1em;
+    color: var(--text-color);
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    font-weight: 500;
+}
+
+.prompt-button:hover {
+    background-color: var(--light-blue);
+    border-color: var(--primary-blue);
+    transform: translateY(-2px);
+}
+
+.prompt-button:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+.prompt-button .fas {
+    font-size: 1.2em;
+    color: var(--primary-blue);
+}
+
+.refresh-prompts-button {
+    background: none;
+    border: none;
+    color: var(--grey-text);
+    font-size: 0.9em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 15px;
+    border-radius: 20px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.refresh-prompts-button:hover {
+    background-color: var(--light-grey);
+    color: var(--primary-blue);
+}
+
+/* ... (existing media queries remain the same below this) ... */
+
+/* ... (existing CSS above this, including the updated .prompt-suggestion-area rule for desktop) ... */
+
+@media (max-width: 768px) {
+    /* ... (other existing rules for max-width: 768px) ... */
+
+    /* PROMPT SUGGESTION AREA: Ensure proper top spacing for tablets */
+    .prompt-suggestion-area {
+        padding-top: 25px; /* Slightly less padding than desktop, but still sufficient */
+        padding-left: 15px;
+        padding-right: 15px;
+        padding-bottom: 20px; /* Keep bottom padding consistent */
+    }
+    .prompt-suggestion-area .welcome-prompt-text h2 {
+        font-size: 1.6em;
+    }
+    .prompt-suggestion-area .welcome-prompt-text p {
+        font-size: 1em;
+    }
+    .prompt-buttons {
+        max-width: 100%; /* Allows buttons to take full width on smaller screens */
+    }
+    .prompt-button {
+        padding: 12px 15px;
+        font-size: 0.95em;
+    }
+}
+
+@media (max-width: 480px) {
+    /* ... (other existing rules for max-width: 480px) ... */
+
+    /* PROMPT SUGGESTION AREA: Re-adjust for mobile */
+    .prompt-suggestion-area {
+        padding-top: 20px; /* Sufficient padding from top for smallest screens */
+        padding-left: 15px;
+        padding-right: 15px;
+        padding-bottom: 15px; /* Keep consistent bottom padding */
+    }
+    .prompt-suggestion-area .welcome-prompt-text {
+        margin-bottom: 20px;
+    }
+    .prompt-suggestion-area .welcome-prompt-text h2 {
+        font-size: 1.4em;
+    }
+    .prompt-suggestion-area .welcome-prompt-text p {
+        font-size: 0.9em;
+    }
+    .prompt-buttons {
+        gap: 10px;
+    }
+    .prompt-button {
+        padding: 10px 12px;
+        font-size: 0.9em;
+        gap: 10px;
+    }
+    .prompt-button .fas {
+        font-size: 1.1em;
+    }
+}
+
+@media (max-width: 480px) {
+    .app-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+        padding: 10px 15px;
+    }
+    .app-header .disclaimer {
+        text-align: left;
+    }
+
+    .chat-header {
+        padding: 10px 15px;
+    }
+    .user-profile .avatar {
+        width: 35px;
+        height: 35px;
+    }
+    .user-profile .user-name {
+        font-size: 0.9em;
+    }
+
+    .chat-content {
+        padding: 15px;
+    }
+
+    .input-wrapper {
+        padding: 6px 12px;
+    }
+    #chat-input {
+        padding: 6px 8px;
+    }
+    #send-button {
+        width: 35px;
+        height: 35px;
+        font-size: 1em;
+    }
+
+    .loading-diagnosis p {
+        font-size: 1em;
+    }
+    .loader-animation {
+        width: 50px;
+        height: 50px;
+    }
+
+    .emergency-actions {
+        flex-direction: column; /* Stack buttons vertically on very small screens */
+        gap: 10px;
+    }
+    .emergency-actions .cta-button {
+        width: 100%;
+    }
+
+    .reopen-button {
+        bottom: 55px;
+        right: 15px;
+    }
+}
+
+
+/* NEW: Sidebar Styles */
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999; /* Below sidebar, above app content */
+    display: none; /* Hidden by default */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar-overlay.active {
+    display: block;
+    opacity: 1;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px; /* Standard sidebar width */
+    height: 100%;
+    background-color: #ffffff; /* White background */
+    box-shadow: 2px 0 10px var(--shadow-color);
+    z-index: 1000; /* Above everything */
+    transform: translateX(-100%); /* Start off-screen */
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    color: var(--text-color);
+}
+
+.sidebar.active {
+    transform: translateX(0); /* Slide in */
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.sidebar-logo {
+    font-size: 1.2em;
+    font-weight: 700;
+    color: var(--primary-blue);
+}
+
+.close-sidebar-button {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    color: var(--grey-text);
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.close-sidebar-button:hover {
+    color: var(--primary-blue);
+}
+
+.sidebar-nav {
+    flex-grow: 1; /* Allows navigation to take up available space */
+    padding: 20px 0;
+    overflow-y: auto; /* Enable scrolling for many nav items */
+}
+
+.sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-nav li {
+    margin-bottom: 5px;
+}
+
+.sidebar-nav .nav-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: 1.0em;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    border-left: 3px solid transparent; /* For active indicator */
+}
+
+.sidebar-nav .nav-item:hover {
+    background-color: var(--light-blue);
+    color: var(--primary-blue);
+}
+
+.sidebar-nav .nav-item.active {
+    background-color: var(--light-blue);
+    color: var(--primary-blue);
+    font-weight: 600;
+    border-left-color: var(--primary-blue);
+}
+
+.sidebar-nav .nav-item .fas {
+    margin-right: 15px;
+    width: 20px; /* Ensure consistent icon alignment */
+    text-align: center;
+}
+
+.sidebar-footer {
+    padding: 15px 20px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.sidebar-footer .user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+}
+
+.sidebar-footer .user-info .avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: var(--light-blue);
+}
+
+.logout-button {
+    background: none;
+    border: none;
+    color: var(--grey-text);
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.logout-button:hover {
+    color: var(--warning-red);
+}
+
+/* NEW: Sidebar Toggle Button in Chat Header */
+.chat-header .sidebar-toggle-button {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    color: var(--grey-text);
+    cursor: pointer;
+    margin-right: 15px;
+    transition: color 0.2s ease;
+}
+
+.chat-header .sidebar-toggle-button:hover {
+    color: var(--primary-blue);
+}
+
+/* NEW: General App Screen Styling */
+.app-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--background-color);
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%); /* Start off-screen to the right */
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); /* Smooth slide animation */
+    z-index: 10; /* Below sidebar, above welcome screen */
+}
+
+.app-screen.active-screen {
+    transform: translateX(0); /* Slide into view */
+    z-index: 20; /* Make sure it's above other inactive screens */
+}
+
+/* Specific styling for new screens */
+.app-screen .app-header {
+    background-color: #ffffff; /* Consistent header background */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    z-index: 5; /* Ensure header is above content */
+    padding: 15px 20px; /* Adjust padding for uniformity */
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Align logo/title to left */
+}
+
+.app-screen .app-header .logo {
+    font-size: 1.2em; /* Match sidebar logo size */
+    font-weight: 600;
+    color: var(--primary-blue);
+    flex-grow: 1; /* Allow logo to push back button to left */
+    text-align: center; /* Center the title */
+    margin-right: 40px; /* Space for back button */
+}
+
+.app-screen .back-button {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    color: var(--grey-text);
+    cursor: pointer;
+    transition: color 0.2s ease;
+    margin-right: 20px; /* Space from title */
+}
+
+.app-screen .back-button:hover {
+    color: var(--primary-blue);
+}
+
+.app-screen .screen-content {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+    color: var(--text-color);
+}
+
+.app-screen .screen-content h2 {
+    color: var(--primary-blue);
+    margin-bottom: 15px;
+    font-size: 1.6em;
+    font-weight: 700;
+}
+
+.app-screen .screen-content p {
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+/* Specific content styles for new screens */
+.history-list, .article-list, .contact-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.history-item, .article-card, .contact-item {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--border-color);
+}
+
+.history-item h4, .article-card h3, .contact-item h4 {
+    color: var(--text-color);
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 1.1em;
+}
+
+.history-item p, .contact-item p {
+    font-size: 0.9em;
+    color: var(--grey-text);
+    margin-bottom: 5px;
+}
+
+.article-card p {
+    font-size: 0.95em;
+    color: var(--grey-text);
+    margin-bottom: 10px;
+}
+
+.read-more-link, .contact-item a {
+    color: var(--primary-blue);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9em;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.read-more-link:hover, .contact-item a:hover {
+    text-decoration: underline;
+}
+
+.contact-item .fas {
+    margin-right: 5px;
+}
+
+.add-contact-button {
+    margin-top: 20px;
+    width: fit-content;
+    align-self: center; /* Center the button if using flex column */
+}
+
+.settings-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.settings-list li {
+    background-color: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 1em;
+    color: var(--text-color);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.settings-list li .fas {
+    color: var(--primary-blue);
+    font-size: 1.2em;
+}
+
+
+/* Existing media queries - ensure sidebar responsive behavior */
+@media (max-width: 768px) {
+    /* ... (existing rules) ... */
+
+    /* Adjust sidebar width for smaller tablets */
+    .sidebar {
+        width: 220px;
+    }
+
+    .chat-header .sidebar-toggle-button {
+        font-size: 1.4em; /* Slightly smaller for mobile */
+    }
+
+    .app-screen .app-header .logo {
+        font-size: 1.1em;
+    }
+    .app-screen .back-button {
+        font-size: 1.4em;
+    }
+    .app-screen .screen-content {
+        padding: 15px;
+    }
+    .app-screen .screen-content h2 {
+        font-size: 1.4em;
+    }
+    .app-screen .screen-content p {
+        font-size: 0.95em;
+    }
+    .history-item, .article-card, .contact-item {
+        padding: 12px;
+    }
+    .history-item h4, .article-card h3, .contact-item h4 {
+        font-size: 1em;
+    }
+    .history-item p, .contact-item p, .article-card p, .read-more-link, .contact-item a {
+        font-size: 0.85em;
+    }
+    .settings-list li {
+        font-size: 0.95em;
+        padding: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    /* ... (existing rules) ... */
+
+    /* Sidebar takes full width on very small mobile */
+    .sidebar {
+        width: 100%;
+    }
+
+    .sidebar-header {
+        padding: 10px 15px;
+    }
+    .sidebar-logo {
+        font-size: 1.1em;
+    }
+    .close-sidebar-button {
+        font-size: 1.3em;
+    }
+    .sidebar-nav .nav-item {
+        padding: 10px 15px;
+        font-size: 0.9em;
+    }
+    .sidebar-footer {
+        padding: 10px 15px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    .logout-button {
+        align-self: flex-end;
+    }
+
+    .chat-header .sidebar-toggle-button {
+        font-size: 1.3em;
+        margin-right: 10px;
+    }
+
+    .app-screen .app-header {
+        padding: 10px 15px;
+    }
+    .app-screen .app-header .logo {
+        font-size: 1em;
+        margin-right: 30px;
+    }
+    .app-screen .back-button {
+        font-size: 1.3em;
+        margin-right: 15px;
+    }
+    .app-screen .screen-content {
+        padding: 10px 15px;
+    }
+    .app-screen .screen-content h2 {
+        font-size: 1.2em;
+    }
+    .app-screen .screen-content p {
+        font-size: 0.85em;
+    }
+    .history-list, .article-list, .contact-list {
+        gap: 10px;
+    }
+    .history-item, .article-card, .contact-item {
+        padding: 10px;
+        font-size: 0.9em;
+    }
+    .settings-list li {
+        padding: 10px;
+        font-size: 0.9em;
+        gap: 10px;
+    }
+}
