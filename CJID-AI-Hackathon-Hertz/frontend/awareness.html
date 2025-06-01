@@ -5,189 +5,220 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Health Awareness</title>
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   <style>
-    /* Additional styles specific to awareness page */
-    .categories-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 20px;
-      justify-content: center;
-    }
+  /* Additional styles specific to awareness page */
+  .categories-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+    justify-content: center;
+  }
+  
+  .category-pill {
+    padding: 8px 16px;
+    border-radius: 20px;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    font-size: 0.9rem;
+    border: none;
+  }
+  
+  .category-pill:hover {
+    background-color: #e0e0e0;
+    transform: translateY(-2px);
+  }
+  
+  .category-pill.active {
+    background-color: var(--primary);
+    color: white;
+  }
+  
+  .awareness-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+  }
+  
+  .awareness-card {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 0.5s forwards;
+  }
+  
+  .awareness-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+  }
+  
+  .card-header {
+    padding: 12px 15px;
+    color: white;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .card-body {
+    padding: 15px;
+    background-color: white;
+  }
+  
+  .card-title {
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+    color: var(--text);
+  }
+  
+  .card-content {
+    color: var(--text-muted);
+    line-height: 1.5;
+    text-align: justify; /* Default for desktop */
+  }
+  
+  /* Mobile responsiveness improvements */
+  @media (max-width: 767px) {
+    /* Other mobile styles remain the same */
     
-    .category-pill {
-      padding: 8px 16px;
-      border-radius: 20px;
-      background-color: #f0f0f0;
-      cursor: pointer;
-      transition: background-color 0.3s, transform 0.2s;
-      font-size: 0.9rem;
-      border: none;
-    }
-    
-    .category-pill:hover {
-      background-color: #e0e0e0;
-      transform: translateY(-2px);
-    }
-    
-    .category-pill.active {
-      background-color: var(--primary);
-      color: white;
-    }
-    
-    .awareness-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 20px;
-      margin-top: 20px;
-    }
-    
-    .awareness-card {
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-      transition: transform 0.3s, box-shadow 0.3s;
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeIn 0.5s forwards;
-    }
-    
-    .awareness-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.15);
-    }
-    
-    .card-header {
-      padding: 12px 15px;
-      color: white;
-      font-weight: 600;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    
-    .card-body {
-      padding: 15px;
-      background-color: white;
-    }
-    
-    .card-title {
-      margin-bottom: 10px;
-      font-size: 1.2rem;
-      color: var(--text);
-    }
-    
+    /* Change card content alignment for mobile */
     .card-content {
-      color: var(--text-muted);
-      line-height: 1.5;
+      font-size: 0.95rem;
+      text-align: left; /* Switch to left alignment on mobile */
     }
     
-    .card-actions {
-      display: flex;
-      justify-content: flex-end;
-      margin-top: 15px;
+    /* Make card title more prominent on mobile */
+    .card-title {
+      font-size: 1.1rem;
+      text-align: left;
+      font-weight: 600;
+      margin-bottom: 8px;
     }
+  }
+  
+  /* Small mobile devices */
+  @media (max-width: 480px) {
+    /* Other small mobile styles remain the same */
     
-    .share-btn {
-      background: none;
-      border: none;
-      color: var(--accent);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      padding: 5px 10px;
-      border-radius: 5px;
-      transition: background-color 0.2s;
+    /* Further refinements for very small screens */
+    .card-content {
+      line-height: 1.4; /* Slightly tighter line height */
     }
-    
-    .share-btn:hover {
-      background-color: rgba(0,0,0,0.05);
-    }
-    
-    .loading-container {
-      text-align: center;
-      padding: 40px 0;
-    }
-    
-    .loading-spinner {
-      border: 4px solid rgba(0,0,0,0.1);
-      border-radius: 50%;
-      border-top: 4px solid var(--primary);
-      width: 40px;
-      height: 40px;
-      margin: 0 auto 15px;
-      animation: spin 1s linear infinite;
-    }
-    
-    .error-container {
-      background-color: #ffebee;
-      border-left: 4px solid #f44336;
-      padding: 15px;
-      margin: 20px 0;
-      border-radius: 5px;
-    }
-    
-    .load-more-btn {
-      margin: 30px auto;
-      display: block;
-      padding: 10px 20px;
-      background-color: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    
-    .load-more-btn:hover {
-      background-color: var(--primary-dark);
-    }
-    
-    .load-more-btn:disabled {
-      background-color: #cccccc;
-      cursor: not-allowed;
-    }
-    
-    .toast-message {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: rgba(0,0,0,0.8);
-      color: white;
-      padding: 10px 20px;
-      border-radius: 5px;
-      z-index: 1000;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-    
-    .toast-message.show {
+  }
+  
+  .card-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 15px;
+  }
+  
+  .share-btn {
+    background: none;
+    border: none;
+    color: var(--accent);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+  }
+  
+  .share-btn:hover {
+    background-color: rgba(0,0,0,0.05);
+  }
+  
+  .loading-container {
+    text-align: center;
+    padding: 40px 0;
+  }
+  
+  .loading-spinner {
+    border: 4px solid rgba(0,0,0,0.1);
+    border-radius: 50%;
+    border-top: 4px solid var(--primary);
+    width: 40px;
+    height: 40px;
+    margin: 0 auto 15px;
+    animation: spin 1s linear infinite;
+  }
+  
+  .error-container {
+    background-color: #ffebee;
+    border-left: 4px solid #f44336;
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 5px;
+  }
+  
+  .load-more-btn {
+    margin: 30px auto;
+    display: block;
+    padding: 10px 20px;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .load-more-btn:hover {
+    background-color: var(--primary-dark);
+  }
+  
+  .load-more-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  .toast-message {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0,0,0,0.8);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  
+  .toast-message.show {
+    opacity: 1;
+  }
+  
+  @keyframes fadeIn {
+    to {
       opacity: 1;
+      transform: translateY(0);
     }
-    
-    @keyframes fadeIn {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    
-    /* Staggered animation for cards */
-    .awareness-card:nth-child(1) { animation-delay: 0.1s; }
-    .awareness-card:nth-child(2) { animation-delay: 0.2s; }
-    .awareness-card:nth-child(3) { animation-delay: 0.3s; }
-    .awareness-card:nth-child(4) { animation-delay: 0.4s; }
-    .awareness-card:nth-child(5) { animation-delay: 0.5s; }
-    .awareness-card:nth-child(6) { animation-delay: 0.6s; }
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  /* Staggered animation for cards */
+  .awareness-card:nth-child(1) { animation-delay: 0.1s; }
+  .awareness-card:nth-child(2) { animation-delay: 0.2s; }
+  .awareness-card:nth-child(3) { animation-delay: 0.3s; }
+  .awareness-card:nth-child(4) { animation-delay: 0.4s; }
+  .awareness-card:nth-child(5) { animation-delay: 0.5s; }
+  .awareness-card:nth-child(6) { animation-delay: 0.6s; }
 
-    /* Modern language selector styling */
+  /* Modern language selector styling */
 .language-selector-container {
   margin: 15px 0 25px;
   display: flex;
@@ -274,55 +305,425 @@
   visibility: hidden;
 }
 
-/* Mobile responsive adjustments */
-@media screen and (max-width: 600px) {
-  .language-selector-container {
-    justify-content: center;
-    margin: 15px 0;
+/* Responsive Navigation Styles */
+.main-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 2rem;
+  background-color: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  box-sizing: border-box;
+}
+
+.nav-brand {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo-icon {
+  font-size: 1.6rem;
+  margin-right: 0.5rem;
+}
+
+.brand-text {
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: var(--primary);
+}
+
+.disclaimer-text {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+}
+
+.nav-links a {
+  color: var(--text-muted);
+  font-weight: 600;
+  text-decoration: none;
+  position: relative;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover, 
+.nav-links a.active {
+  color: var(--primary);
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background-color: var(--primary);
+  transition: width 0.3s;
+  border-radius: 3px;
+}
+
+.nav-links a:hover::after,
+.nav-links a.active::after {
+  width: 100%;
+}
+
+/* Navigation Toggle Button */
+.nav-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--text);
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: color 0.3s;
+}
+
+.nav-toggle:hover {
+  color: var(--primary);
+}
+
+/* Sidebar Styles */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -280px; /* Initially hidden off-screen */
+  width: 280px;
+  height: 100vh;
+  background-color: var(--primary);
+  color: white;
+  padding: 1rem 0;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  transition: left 0.3s ease;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.sidebar.open {
+  left: 0; /* Visible when open */
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 1rem;
+}
+
+.sidebar-logo {
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
+}
+
+.sidebar-title {
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.sidebar-close {
+  margin-left: auto;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+.sidebar-links {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0 1rem;
+}
+
+.sidebar-links a {
+  color: white;
+  text-decoration: none;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: background-color 0.3s;
+}
+
+.sidebar-links a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-links a.active {
+  background-color: rgba(255, 255, 255, 0.2);
+  font-weight: 600;
+}
+
+.sidebar-footer {
+  padding: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+.login-button {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.login-button:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Sidebar Overlay */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+.sidebar-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Adjust content spacing to account for fixed header */
+.screen {
+  margin-top: 80px; /* Account for fixed header */
+  padding-top: 1rem;
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 992px) {
+  /* Hide nav links on smaller screens */
+  .nav-links {
+    display: none;
   }
   
-  .language-selector-wrapper {
-    min-width: 85%;
-    justify-content: space-between;
+  /* Show hamburger menu on smaller screens */
+  .nav-toggle {
+    display: block;
   }
   
-  .language-selector {
-    flex-grow: 1;
-    min-height: 44px; /* Larger touch target */
+  /* Adjust spacing for the main content */
+  .screen {
+    margin-top: 70px;
   }
   
-  /* Ensure the dropdown options are large enough to tap */
-  .language-selector option {
-    padding: 12px;
-    font-size: 16px;
+  /* Hide disclaimer text on smaller screens */
+  .disclaimer-text {
+    display: none;
+  }
+  
+  /* Adjust header padding */
+  .main-nav {
+    padding: 0.75rem 1rem;
   }
 }
+
+/* Additional class to prevent scrolling when sidebar is open */
+body.no-scroll {
+  overflow: hidden;
+}
+
+/* Mobile responsiveness improvements */
+@media (max-width: 767px) {
+    /* Adjust category pills for mobile */
+    .categories-container {
+      gap: 8px;
+      padding: 0 5px;
+    }
+    
+    .category-pill {
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      flex: 0 0 auto; /* Prevent stretching */
+      max-width: fit-content; /* Limit width to content */
+    }
+    
+    /* Adjust grid layout for mobile */
+    .awareness-grid {
+      grid-template-columns: 1fr; /* Single column on mobile */
+      gap: 15px;
+      padding: 0 5px;
+      width: 100%;
+      margin: 15px auto 0;
+    }
+    
+    /* Center cards on mobile */
+    .awareness-card {
+      margin: 0 auto;
+      width: 100%;
+      max-width: 350px;
+    }
+    
+    /* Adjust card content */
+    .card-title {
+      font-size: 1.1rem;
+      text-align: left;
+    }
+    
+    .card-content {
+      font-size: 0.95rem;
+      text-align: left; /* Switch to left alignment on mobile */
+    }
+    
+    /* Adjust language selector */
+    .language-selector-container {
+      justify-content: center;
+      margin: 15px 0;
+    }
+    
+    .language-selector-wrapper {
+      width: 90%;
+      max-width: 280px;
+    }
+    
+    /* Adjust loading and buttons */
+    .load-more-btn {
+      padding: 8px 16px;
+      font-size: 0.95rem;
+      margin: 20px auto;
+    }
+    
+    .loading-container p {
+      font-size: 0.95rem;
+    }
+    
+    /* Improve screen padding */
+    .screen {
+      padding: 1rem;
+    }
+    
+    /* Adjust headers */
+    .screen header h2 {
+      font-size: 1.5rem;
+    }
+    
+    .screen header p {
+      font-size: 0.9rem;
+    }
+  }
+  
+  /* Small mobile devices */
+  @media (max-width: 480px) {
+    .category-pill {
+      padding: 5px 10px;
+      font-size: 0.75rem;
+    }
+    
+    .awareness-card {
+      max-width: 100%; /* Full width on very small screens */
+    }
+    
+    .card-header {
+      padding: 10px 12px;
+      font-size: 0.9rem;
+    }
+    
+    .card-body {
+      padding: 12px;
+    }
+  }
   </style>
 </head>
 <body>
-  <header class="main-nav">
-    <div class="nav-brand">❤️ HealthMate AI</div>
-    <nav class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="symptoms.html">Symptoms</a>
-      <a href="tips.html">Tips</a>
-      <a href="awareness.html">Awareness</a>
-      <a href="quiz.html">Quiz</a>
-      <a href="history.html">History</a>
-      <a href="chat.html">Chat</a>
-    </nav>
-    <div class="nav-toggle" onclick="toggleSidebar()">☰</div>
-  </header>
+  <!-- Sidebar overlay -->
+<div class="sidebar-overlay"></div>
 
-  <aside id="sidebar" class="sidebar">
-    <a href="index.html">🏠 Home</a>
-    <a href="symptoms.html">🩺 Symptoms</a>
-    <a href="tips.html">💡 Tips</a>
-    <a href="awareness.html">📚 Awareness</a>
-    <a href="quiz.html">📝 Quiz</a>
-    <a href="history.html">📈 History</a>
-    <a href="chat.html">💬 Chat</a>
-  </aside>
+<header class="main-nav">
+  <div class="nav-brand">
+    <div class="brand-container">
+      <span class="logo-icon">❤️</span>
+      <span class="brand-text">HealthMate AI</span>
+    </div>
+    <div class="disclaimer-text">Powered by AI, Not a Doctor</div>
+  </div>
+  <nav class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="symptoms.html">Symptoms</a>
+    <a href="tips.html">Tips</a>
+    <a href="awareness.html" class="active">Awareness</a>
+    <a href="history.html">History</a>
+    <a href="chat.html">Chat</a>
+  </nav>
+  <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+  </button>
+</header>
+
+<aside id="sidebar" class="sidebar">
+  <div class="sidebar-header">
+    <span class="sidebar-logo">❤️</span>
+    <span class="sidebar-title">HealthMate AI</span>
+    <button class="sidebar-close" aria-label="Close navigation menu" onclick="toggleSidebar()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <nav class="sidebar-links">
+    <a href="index.html"><i class="fas fa-home"></i> Home</a>
+    <a href="symptoms.html"><i class="fas fa-stethoscope"></i> Symptoms</a>
+    <a href="tips.html"><i class="fas fa-lightbulb"></i> Tips</a>
+    <a href="awareness.html" class="active"><i class="fas fa-book-medical"></i> Awareness</a>
+    <a href="history.html"><i class="fas fa-chart-line"></i> History</a>
+    <a href="chat.html"><i class="fas fa-comment-medical"></i> Chat</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-info">
+      <img src="https://via.placeholder.com/30/87CEEB/FFFFFF?text=U" alt="User Avatar" class="avatar">
+      <span>Guest User</span>
+    </div>
+    <a href="login.html" class="login-button" title="Login"><i class="fas fa-sign-in-alt"></i></a>
+  </div>
+</aside>
 
   <div class="screen">
     <header>

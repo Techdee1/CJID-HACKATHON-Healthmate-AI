@@ -55,17 +55,16 @@ async function initAwarenessPage() {
     updateConnectionStatus('Initializing...');
     setupIntersectionObserver();
     
-    // Set language selector to saved preference or English
+    // Always set default language to English first
+    currentLanguage = 'en';
+    localStorage.setItem('preferred_language', 'en');
+    
+    // Set language selector to saved preference if valid
     if (languageSelector) {
-        // Check if there's a saved preference
+        // Check if there's a saved preference (but use it only if valid)
         const savedLanguage = localStorage.getItem('preferred_language');
-        // Only use saved language if it exists and is valid
         if (savedLanguage && ['en', 'yo', 'ha', 'ig', 'pcm'].includes(savedLanguage)) {
             currentLanguage = savedLanguage;
-        } else {
-            // Otherwise reset to English and save the preference
-            currentLanguage = 'en';
-            localStorage.setItem('preferred_language', 'en');
         }
         
         // Set the selector value
@@ -98,7 +97,7 @@ async function initAwarenessPage() {
         updateConnectionStatus('Connected successfully');
     } catch (error) {
         console.error('Error initializing page:', error);
-        showErrorState();
+        renderContent(fallbackContent, true);
         updateConnectionStatus('Failed to connect to API');
     }
 }
@@ -214,6 +213,7 @@ function setActiveCategory(category) {
 }
 
 // Load content from API
+// Load content from API - specific update for handling "all" category
 async function loadContent(forceRefresh = false) {
     if (isLoading) return;
     
@@ -239,6 +239,9 @@ async function loadContent(forceRefresh = false) {
         // If not in cache or forcing refresh, fetch from API
         try {
             if (currentCategory === 'all') {
+                // REMOVED the automatic language switch to English
+                // Instead, we'll attempt translation first and only fall back if it fails
+                
                 const response = await fetchWithTimeout(`${API_BASE_URL}/api/health/awareness/random?count=6`);
                 const data = await response.json();
                 
@@ -264,17 +267,56 @@ async function loadContent(forceRefresh = false) {
             setCacheData(cacheKey, content);
             
             // Store the original content for translation later
-            originalContent = content;
+            originalContent = JSON.parse(JSON.stringify(content)); // Deep copy
             
-            // If not in English, translate the content
+            // Only translate if not English and translation is needed
             if (currentLanguage !== 'en') {
                 try {
-                    content = await translateContent(content, currentLanguage);
-                    const cacheKey = `translated_${currentCategory}_${currentLanguage}`;
-                    translatedContentCache[cacheKey] = content;
+                    // Store translation in cache
+                    const translationCacheKey = `translated_${currentCategory}_${currentLanguage}`;
+                    let translatedContent = translatedContentCache[translationCacheKey];
+                    
+                    if (!translatedContent) {
+                        // Show a toast for "All Topics" to inform the user translation is in progress
+                        if (currentCategory === 'all') {
+                            showToast(`Translating content to ${getLanguageName(currentLanguage)}...`);
+                        }
+                        
+                        translatedContent = await translateContent(content, currentLanguage);
+                        
+                        // If we got any translated content, cache it
+                        if (translatedContent && translatedContent.length > 0) {
+                            translatedContentCache[translationCacheKey] = translatedContent;
+                        } else {
+                            throw new Error('No translated content received');
+                        }
+                    }
+                    
+                    content = translatedContent;
                 } catch (translationError) {
                     console.error('Error translating content:', translationError);
-                    // Continue with original content if translation fails
+                    
+                    // Only for "all" category: switch to English if translation completely fails
+                    if (currentCategory === 'all' && (!content || content.length === 0)) {
+                        showToast(`Translation for All Topics failed. Showing content in English.`);
+                        
+                        // Switch to English ONLY if we have NO translated content
+                        currentLanguage = 'en';
+                        languageSelector.value = 'en';
+                        localStorage.setItem('preferred_language', 'en');
+                        
+                        // Use original content (English)
+                        content = originalContent;
+                    } else {
+                        // For specific categories or if we have partial content, show what we have
+                        // Keep the current language selected
+                        showToast(`Some content couldn't be translated. Showing available content.`);
+                        
+                        // Use what we have (might be partial or original)
+                        if (content.length === 0) {
+                            content = originalContent;
+                        }
+                    }
                 }
             }
             
@@ -618,25 +660,33 @@ function setupEventListeners() {
   });
 }
 
-// Fix for sidebar toggle functionality
+// Function to toggle sidebar visibility
 function toggleSidebar() {
   const sidebar = document.getElementById('sidebar');
+  const overlay = document.querySelector('.sidebar-overlay');
+  const toggleButton = document.querySelector('.nav-toggle');
+  
   if (sidebar) {
-    // Toggle the open class for CSS transitions
+    // Toggle sidebar visibility
     sidebar.classList.toggle('open');
     
-    // Also toggle active class if present in CSS
-    sidebar.classList.toggle('active');
-    
-    // Toggle class on screen element if needed
-    const screen = document.querySelector('.screen');
-    if (screen) {
-      screen.classList.toggle('sidebar-open');
+    // Toggle overlay
+    if (overlay) {
+      overlay.classList.toggle('active');
     }
+    
+    // Toggle aria-expanded attribute for accessibility
+    if (toggleButton) {
+      const isExpanded = toggleButton.getAttribute('aria-expanded') === 'true';
+      toggleButton.setAttribute('aria-expanded', !isExpanded);
+    }
+    
+    // Prevent body scrolling when sidebar is open
+    document.body.classList.toggle('no-scroll');
   }
 }
 
-// Make sure the function is available globally
+// Make the function available globally
 window.toggleSidebar = toggleSidebar;
 
 // Improved fetchWithTimeout function
@@ -718,6 +768,7 @@ async function handleLanguageChange(event) {
     if (newLanguage === currentLanguage) return;
     
     // Save the new language preference
+    const previousLanguage = currentLanguage;
     currentLanguage = newLanguage;
     localStorage.setItem('preferred_language', currentLanguage);
     
@@ -728,51 +779,89 @@ async function handleLanguageChange(event) {
     // Log status but don't show in UI
     updateConnectionStatus(`Switching to ${getLanguageName(currentLanguage)}...`);
     
-    // If we have content to translate
-    if (awarenessGrid.children.length > 0) {
-        try {
-            // Collect current content
-            const contentToTranslate = originalContent.length > 0 ? 
-                originalContent : 
-                Array.from(awarenessGrid.children).map(card => {
-                    return {
-                        title: card.querySelector('.card-title').textContent,
-                        content: card.querySelector('.card-content').textContent,
-                        category: card.querySelector('.card-header span').textContent,
-                        color: card.querySelector('.card-header').style.backgroundColor
-                    };
-                });
-            
-            // Check if we have cached translations
-            const cacheKey = `translated_${currentCategory}_${currentLanguage}`;
-            
-            if (translatedContentCache[cacheKey]) {
-                // Use cached translations
-                renderContent(translatedContentCache[cacheKey], true);
-                wrapper.classList.remove('language-loading-active');
-                return;
-            }
-            
-            // Translate content if not English
-            if (currentLanguage !== 'en') {
-                const translatedContent = await translateContent(contentToTranslate, currentLanguage);
-                translatedContentCache[cacheKey] = translatedContent;
-                renderContent(translatedContent, true);
+    try {
+        // If switching to English, use original content directly
+        if (currentLanguage === 'en') {
+            if (originalContent.length > 0) {
+                renderContent(originalContent, true);
             } else {
-                // If switching back to English, use original content
-                renderContent(originalContent.length > 0 ? originalContent : contentToTranslate, true);
+                // Reload content if we don't have original content
+                await loadContent(true);
+            }
+            wrapper.classList.remove('language-loading-active');
+            return;
+        }
+        
+        // For non-English languages, check cache first
+        const cacheKey = `translated_${currentCategory}_${currentLanguage}`;
+        if (translatedContentCache[cacheKey]) {
+            renderContent(translatedContentCache[cacheKey], true);
+            wrapper.classList.remove('language-loading-active');
+            return;
+        }
+        
+        // No cached translation, do fresh translation
+        let contentToTranslate;
+        
+        // Make sure we have original content for translation
+        if (originalContent.length > 0) {
+            contentToTranslate = originalContent;
+        } else {
+            // Get content from cards if no original content
+            contentToTranslate = Array.from(awarenessGrid.children).map(card => {
+                return {
+                    title: card.querySelector('.card-title').textContent,
+                    content: card.querySelector('.card-content').textContent,
+                    category: card.querySelector('.card-header span').textContent,
+                    color: card.querySelector('.card-header').style.backgroundColor
+                };
+            });
+        }
+        
+        if (contentToTranslate.length > 0) {
+            const translatedContent = await translateContent(contentToTranslate, currentLanguage);
+            
+            // Verify that we have meaningful translation results
+            if (!translatedContent || translatedContent.length === 0 || 
+                (currentCategory === 'all' && translatedContent.length < 3)) {
+                throw new Error("Translation incomplete or unsuccessful");
             }
             
-            hideError();
-        } catch (error) {
-            console.error('Error translating content:', error);
-            // Only log to console, not UI
-            updateConnectionStatus(`Error translating content: ${error.message}`);
-        } finally {
-            // Always remove loading indicator
-            wrapper.classList.remove('language-loading-active');
+            translatedContentCache[cacheKey] = translatedContent;
+            renderContent(translatedContent, true);
+        } else {
+            // If we have no content to translate, reload
+            await loadContent(true);
         }
-    } else {
+    } catch (error) {
+        console.error('Error translating content:', error);
+        // Log error but don't display in UI
+        updateConnectionStatus(`Error translating: ${error.message}`);
+        
+        // Reset language to previous on translation failure
+        currentLanguage = previousLanguage;
+        languageSelector.value = previousLanguage;
+        localStorage.setItem('preferred_language', previousLanguage);
+        
+        // Show a toast notification about translation failure
+        showToast(`Translation to ${getLanguageName(newLanguage)} failed. Showing content in ${getLanguageName(previousLanguage)}.`);
+        
+        // If we were trying to translate "all" category content, reload in English
+        if (currentCategory === 'all' && previousLanguage !== 'en') {
+            currentLanguage = 'en';
+            languageSelector.value = 'en';
+            localStorage.setItem('preferred_language', 'en');
+            showToast(`Showing All Topics in English due to translation limitations.`);
+            
+            // Reload content in English
+            if (originalContent.length > 0) {
+                renderContent(originalContent, true);
+            } else {
+                await loadContent(true);
+            }
+        }
+    } finally {
+        // Always remove loading indicator
         wrapper.classList.remove('language-loading-active');
     }
 }
@@ -782,28 +871,53 @@ async function translateContent(content, targetLanguage) {
     if (targetLanguage === 'en') return content;
     
     try {
+        // For all categories including 'all', try to translate
+        // Add timeout to prevent hanging
         const response = await fetchWithTimeout(`${API_BASE_URL}/api/translate/awareness`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                content: content,
+                // For 'all' category, limit items to translate to avoid overwhelming the API
+                content: currentCategory === 'all' ? 
+                    content.slice(0, Math.min(content.length, 6)) : content,
                 target_language: targetLanguage
             })
-        });
+        }, 15000); // Increased timeout
         
         const data = await response.json();
         
-        if (!data.success) {
+        if (!data.success || !data.translated_content) {
             throw new Error(data.error || 'Translation failed');
         }
         
-        return data.translated_content;
+        // Mark translated content
+        const translatedContent = data.translated_content.map(item => ({
+            ...item,
+            translated: true
+        }));
+        
+        return translatedContent;
     } catch (error) {
-        console.error('Translation error:', error);
-        // Return original content if translation fails
-        return content;
+        console.error(`Translation error for ${currentCategory} category:`, error);
+        
+        // If it's not the 'all' category, rethrow to be handled by caller
+        if (currentCategory !== 'all') {
+            throw error;
+        }
+        
+        // For 'all' category, we'll try to recover with partial translation or fallback
+        // If we have original content, mark it as not translated and return
+        if (content && content.length > 0) {
+            showToast(`Some content couldn't be translated to ${getLanguageName(targetLanguage)}. Showing mixed content.`);
+            
+            // Return original content without translated flag
+            return content;
+        } else {
+            // If we have no content to work with, signal complete failure
+            throw new Error('Unable to translate content');
+        }
     }
 }
 

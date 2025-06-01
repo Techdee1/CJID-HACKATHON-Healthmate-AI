@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>First Aid Guides - HealthMate AI</title>
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- FontAwesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <style>
+    /* Page-specific styles */
+    .screen {
+      max-width: 1200px;
+      min-height: auto;
+      margin-top: 80px;
+      padding-bottom: 40px;
+    }
+    
+    .section-divider {
+      display: flex;
+      justify-content: center;
+      margin: 15px auto 40px;
+    }
+    
+    .divider-accent {
+      width: 80px;
+      height: 4px;
+      background-color: var(--primary);
+      border-radius: 2px;
+    }
+    
+    .guides-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 30px;
+      margin-top: 40px;
+    }
+    
+    .guide-card {
+      background-color: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      position: relative;
+    }
+    
+    .guide-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .guide-header {
+      position: relative;
+      background-color: #f8f9fa;
+      padding: 25px 20px;
+      text-align: center;
+    }
+    
+    .guide-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin: 0 auto 15px;
+      color: white;
+    }
+    
+    .guide-urgent {
+      background-color: #ef4444;
+    }
+    
+    .guide-important {
+      background-color: #f59e0b;
+    }
+    
+    .guide-basic {
+      background-color: var(--primary);
+    }
+    
+    .guide-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: var(--text);
+    }
+    
+    .guide-content {
+      padding: 25px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .guide-description {
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      line-height: 1.6;
+      flex-grow: 1;
+      text-align: left; /* Ensure left alignment */
+    }
+    
+    .guide-steps {
+      margin-bottom: 25px;
+    }
+    
+    .guide-steps h4 {
+      font-size: 1.1rem;
+      margin-bottom: 15px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-align: left; /* Ensure left alignment */
+    }
+    
+    .guide-steps h4 i {
+      color: var(--primary);
+    }
+    
+    .guide-steps ol {
+      padding-left: 25px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      text-align: left; /* Ensure left alignment */
+      margin-left: 0; /* Remove any default margin that might affect alignment */
+    }
+    
+    .guide-steps li {
+      margin-bottom: 8px;
+      text-align: left; /* Ensure left alignment */
+      padding-left: 5px; /* Add a little padding for better readability */
+    }
+    
+    .guide-note {
+      background-color: rgba(45, 179, 111, 0.1);
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: auto;
+      border-left: 4px solid var(--primary);
+    }
+    
+    .guide-note p {
+      margin: 0;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      text-align: left; /* Ensure left alignment */
+    }
+    
+    .guide-actions {
+      margin-top: 25px;
+      display: flex;
+      gap: 15px;
+    }
+    
+    .guide-actions a {
+      flex: 1;
+      text-align: center;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    
+    .primary-action {
+      background-color: var(--primary);
+      color: white;
+      text-decoration: none;
+    }
+    
+    .primary-action:hover {
+      background-color: var(--primary-dark);
+    }
+    
+    .secondary-action {
+      background-color: #f8f9fa;
+      color: var(--text);
+      text-decoration: none;
+    }
+    
+    .secondary-action:hover {
+      background-color: #e9ecef;
+    }
+    
+    .guide-badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    
+    .badge-urgent {
+      background-color: #fef2f2;
+      color: #ef4444;
+    }
+    
+    .badge-important {
+      background-color: #fffbeb;
+      color: #f59e0b;
+    }
+    
+    .filter-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    
+    .filter-button {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 20px;
+      background-color: #f8f9fa;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .filter-button:hover {
+      background-color: #e9ecef;
+    }
+    
+    .filter-button.active {
+      background-color: var(--primary);
+      color: white;
+    }
+    
+    .print-button {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+    
+    .print-button:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    }
+    
+    /* Media queries for responsive design */
+    @media (max-width: 992px) {
+      .guides-container {
+        grid-template-columns: repeat(2, 1fr);
+        margin: 30px auto 0;
+        max-width: 90%;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .screen {
+        margin-top: 70px;
+        padding: 20px;
+      }
+      
+      .section-title {
+        font-size: 1.8rem;
+      }
+      
+      .guides-container {
+        grid-template-columns: 1fr;
+        gap: 25px;
+        margin: 20px auto 0;
+        max-width: 500px; /* Limit max width on mobile */
+      }
+      
+      .guide-header {
+        padding: 20px 15px;
+      }
+      
+      .guide-content {
+        padding: 20px;
+      }
+      
+      .print-button {
+        bottom: 20px;
+        right: 20px;
+      }
+      
+      /* Hide desktop navigation */
+      .nav-links {
+        display: none;
+      }
+      
+      /* Show mobile toggle */
+      .nav-toggle {
+        display: block;
+        background: transparent;
+        border: none;
+        font-size: 1.5rem;
+        color: var(--text);
+        cursor: pointer;
+        margin-right: 15px;
+      }
+      
+      /* Adjust header */
+      .main-nav {
+        padding: 0 15px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .screen {
+        margin-top: 60px;
+        padding: 15px 10px;
+      }
+      
+      .section-header {
+        margin-bottom: 10px;
+      }
+      
+      .section-title {
+        font-size: 1.5rem;
+      }
+      
+      .section-subtitle {
+        font-size: 0.9rem;
+      }
+      
+      .section-divider {
+        margin: 10px auto 25px;
+      }
+      
+      .guide-title {
+        font-size: 1.2rem;
+      }
+      
+      .guide-actions {
+        flex-direction: column;
+      }
+      
+      .filter-container {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        justify-content: flex-start;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+      }
+      
+      .filter-button {
+        white-space: nowrap;
+        padding: 6px 12px;
+        font-size: 0.9rem;
+      }
+      
+      .guides-container {
+        gap: 20px;
+        margin-top: 15px;
+      }
+      
+      /* Improve guide card appearance on mobile */
+      .guide-card {
+        margin: 0 auto;
+        max-width: 100%;
+      }
+      
+      .guide-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+        margin-bottom: 10px;
+      }
+      
+      .guide-steps h4 {
+        font-size: 1rem;
+      }
+      
+      .guide-steps ol {
+        padding-left: 20px;
+      }
+      
+      .guide-steps li {
+        font-size: 0.95rem;
+      }
+      
+      /* Hide disclaimer on mobile */
+      .disclaimer-text {
+        display: none;
+      }
+      
+      /* Adjust brand container */
+      .nav-brand {
+        display: flex;
+        align-items: center;
+        padding: 10px 15px;
+      }
+      
+      .brand-container {
+        display: flex;
+        align-items: center;
+      }
+    }
+
+    /* Ensure sidebar works correctly for mobile */
+    .sidebar-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+    
+    .sidebar-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    /* Fix sidebar position and animation */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -280px;
+      width: 280px;
+      height: 100vh;
+      background-color: var(--primary);
+      transition: left 0.3s ease;
+      z-index: 1000;
+    }
+    
+    .sidebar.open {
+      left: 0;
+    }
+    
+    /* Nav toggle visibility */
+    .nav-toggle {
+      display: none; /* Hidden by default, shown in media query */
+    }
+    
+    /* Prevent body scroll when sidebar is open */
+    body.no-scroll {
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar overlay -->
+  <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+  <!-- Main navigation -->
+  <header class="main-nav">
+    <div class="nav-brand">
+      <div class="brand-container">
+        <span class="logo-icon">❤️</span>
+        <span class="brand-text">HealthMate AI</span>
+      </div>
+      <div class="disclaimer-text">Powered by AI, Not a Doctor</div>
+    </div>
+    
+    <!-- Desktop navigation links -->
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="symptoms.html">Symptoms</a>
+      <a href="tips.html">Tips</a>
+      <a href="awareness.html">Awareness</a>
+      <a href="history.html">History</a>
+      <a href="chat.html">Chat</a>
+    </nav>
+    
+    <!-- Mobile menu toggle button -->
+    <button class="nav-toggle" aria-label="Toggle navigation menu" onclick="toggleSidebar()">
+      <i class="fas fa-bars"></i>
+    </button>
+  </header>
+
+  <!-- Mobile sidebar -->
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-header">
+      <span class="sidebar-logo">❤️</span>
+      <span class="sidebar-title">HealthMate AI</span>
+      <button class="sidebar-close" aria-label="Close navigation menu" onclick="toggleSidebar()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <nav class="sidebar-links">
+      <a href="index.html"><i class="fas fa-home"></i> Home</a>
+      <a href="symptoms.html"><i class="fas fa-stethoscope"></i> Symptoms</a>
+      <a href="tips.html"><i class="fas fa-lightbulb"></i> Tips</a>
+      <a href="awareness.html"><i class="fas fa-book-medical"></i> Awareness</a>
+      <a href="history.html"><i class="fas fa-chart-line"></i> History</a>
+      <a href="chat.html"><i class="fas fa-comment-medical"></i> Chat</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <img src="https://via.placeholder.com/30/87CEEB/FFFFFF?text=U" alt="User Avatar" class="avatar">
+        <span>Guest User</span>
+      </div>
+      <a href="login.html" class="login-button" title="Login"><i class="fas fa-sign-in-alt"></i></a>
+    </div>
+  </aside>
+
+  <!-- Main content area -->
+  <div class="screen">
+    <div class="section-header">
+      <h2 class="section-title">First Aid Guides</h2>
+      <p class="section-subtitle">Step-by-step instructions for common emergency situations</p>
+      <div class="section-divider">
+        <div class="divider-accent"></div>
+      </div>
+    </div>
+    
+    <!-- Filter buttons -->
+    <div class="filter-container">
+      <button class="filter-button active" data-filter="all">All Guides</button>
+      <button class="filter-button" data-filter="urgent">Urgent</button>
+      <button class="filter-button" data-filter="important">Important</button>
+      <button class="filter-button" data-filter="basic">Basic</button>
+    </div>
+    
+    <!-- First Aid Guides Grid -->
+    <div class="guides-container">
+      <!-- Guide 1: CPR -->
+      <div class="guide-card" data-category="urgent">
+        <div class="guide-header">
+          <div class="guide-icon guide-urgent">
+            <i class="fas fa-heartbeat"></i>
+          </div>
+          <h3 class="guide-title">CPR (Cardiopulmonary Resuscitation)</h3>
+          <span class="guide-badge badge-urgent">Urgent</span>
+        </div>
+        <div class="guide-content">
+          <p class="guide-description">CPR can help keep oxygenated blood flowing to the brain and other vital organs until emergency medical treatment can restore normal heart rhythm.</p>
+          
+          <div class="guide-steps">
+            <h4><i class="fas fa-list-ol"></i> Follow These Steps:</h4>
+            <ol>
+              <li><strong>Check responsiveness:</strong> Tap the person and shout "Are you OK?"</li>
+              <li><strong>Call emergency services (112):</strong> If unresponsive, or ask someone else to call</li>
+              <li><strong>Position the person:</strong> Place them on their back on a firm surface</li>
+              <li><strong>Begin chest compressions:</strong> Place hands on center of chest, push hard and fast (100-120 compressions per minute)</li>
+              <li><strong>Allow chest to recoil:</strong> Let the chest rise completely between compressions</li>
+              <li><strong>Continue CPR:</strong> Until help arrives or person shows signs of life</li>
+            </ol>
+          </div>
+          
+          <div class="guide-note">
+            <p>Note: Hands-only CPR (compression without rescue breaths) is recommended for untrained bystanders.</p>
+          </div>
+          
+          <div class="guide-actions">
+            <a href="tel:112" class="primary-action">Call Emergency</a>
+            <a href="#" class="secondary-action" onclick="window.print()">Print Guide</a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Guide 2: Choking -->
+      <div class="guide-card" data-category="urgent">
+        <div class="guide-header">
+          <div class="guide-icon guide-urgent">
+            <i class="fas fa-lungs"></i>
+          </div>
+          <h3 class="guide-title">Choking Relief (Heimlich Maneuver)</h3>
+          <span class="guide-badge badge-urgent">Urgent</span>
+        </div>
+        <div class="guide-content">
+          <p class="guide-description">The Heimlich maneuver can help dislodge an object blocking someone's airway. Use it only when someone is choking and cannot breathe, cough, or speak.</p>
+          
+          <div class="guide-steps">
+            <h4><i class="fas fa-list-ol"></i> Follow These Steps:</h4>
+            <ol>
+              <li><strong>Stand behind the person:</strong> Wrap your arms around their waist</li>
+              <li><strong>Position your hands:</strong> Make a fist with one hand, place it thumb-side against middle of person's abdomen, just above the navel</li>
+              <li><strong>Grasp your fist:</strong> With your other hand</li>
+              <li><strong>Perform quick, upward thrusts:</strong> Press hard into the abdomen with quick upward thrusts</li>
+              <li><strong>Repeat as needed:</strong> Continue until the object is expelled or the person becomes unconscious</li>
+            </ol>
+          </div>
+          
+          <div class="guide-note">
+            <p>Note: If the person becomes unconscious, lower them to the ground, call emergency services, and begin CPR.</p>
+          </div>
+          
+          <div class="guide-actions">
+            <a href="tel:112" class="primary-action">Call Emergency</a>
+            <a href="#" class="secondary-action" onclick="window.print()">Print Guide</a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Guide 3: Stroke Recognition -->
+      <div class="guide-card" data-category="urgent">
+        <div class="guide-header">
+          <div class="guide-icon guide-urgent">
+            <i class="fas fa-brain"></i>
+          </div>
+          <h3 class="guide-title">Stroke Recognition (FAST)</h3>
+          <span class="guide-badge badge-urgent">Urgent</span>
+        </div>
+        <div class="guide-content">
+          <p class="guide-description">A stroke requires immediate medical attention. Use the FAST method to recognize stroke symptoms and act quickly to get help.</p>
+          
+          <div class="guide-steps">
+            <h4><i class="fas fa-list-ol"></i> FAST Method:</h4>
+            <ol>
+              <li><strong>F - Face drooping:</strong> Ask the person to smile. Is one side of the face drooping?</li>
+              <li><strong>A - Arm weakness:</strong> Ask the person to raise both arms. Does one arm drift downward?</li>
+              <li><strong>S - Speech difficulty:</strong> Ask the person to repeat a simple phrase. Is their speech slurred or strange?</li>
+              <li><strong>T - Time to call emergency services:</strong> If you observe any of these signs, call emergency services immediately</li>
+            </ol>
+          </div>
+          
+          <div class="guide-note">
+            <p>Note: Other symptoms may include sudden numbness, confusion, trouble seeing, difficulty walking, or severe headache.</p>
+          </div>
+          
+          <div class="guide-actions">
+            <a href="tel:112" class="primary-action">Call Emergency</a>
+            <a href="#" class="secondary-action" onclick="window.print()">Print Guide</a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Guide 4: Bleeding Control -->
+      <div class="guide-card" data-category="important">
+        <div class="guide-header">
+          <div class="guide-icon guide-important">
+            <i class="fas fa-tint"></i>
+          </div>
+          <h3 class="guide-title">Severe Bleeding Control</h3>
+          <span class="guide-badge badge-important">Important</span>
+        </div>
+        <div class="guide-content">
+          <p class="guide-description">Severe bleeding can be life-threatening. Acting quickly to control bleeding can save lives until medical help arrives.</p>
+          
+          <div class="guide-steps">
+            <h4><i class="fas fa-list-ol"></i> Follow These Steps:</h4>
+            <ol>
+              <li><strong>Apply pressure:</strong> Use a clean cloth or bandage and press firmly on the wound</li>
+              <li><strong>Maintain pressure:</strong> Continue applying steady pressure for at least 15 minutes</li>
+              <li><strong>Add more bandages:</strong> If blood soaks through, add more bandages without removing the original one</li>
+              <li><strong>Elevate the wound:</strong> If possible, raise the injured area above the level of the heart</li>
+              <li><strong>Apply a tourniquet:</strong> For severe limb bleeding that doesn't stop, use a tourniquet if available and you know how to apply it</li>
+            </ol>
+          </div>
+          
+          <div class="guide-note">
+            <p>Note: Always call emergency services for severe bleeding. Do not remove objects embedded in a wound.</p>
+          </div>
+          
+          <div class="guide-actions">
+            <a href="tel:112" class="primary-action">Call Emergency</a>
+            <a href="#" class="secondary-action" onclick="window.print()">Print Guide</a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Guide 5: Burns Treatment -->
+      <div class="guide-card" data-category="important">
+        <div class="guide-header">
+          <div class="guide-icon guide-important">
+            <i class="fas fa-fire-alt"></i>
+          </div>
+          <h3 class="guide-title">Burns Treatment</h3>
+          <span class="guide-badge badge-important">Important</span>
+        </div>
+        <div class="guide-content">
+          <p class="guide-description">Proper first aid for burns can reduce pain and severity. The treatment varies based on the type and degree of the burn.</p>
+          
+          <div class="guide-steps">
+            <h4><i class="fas fa-list-ol"></i> For Minor Burns:</h4>
+            <ol>
+              <li><strong>Cool the burn:</strong> Hold under cool (not cold) running water for 10-15 minutes</li>
+              <li><strong>Remove jewelry/tight items:</strong> Before swelling occurs</li>
+              <li><strong>Apply lotion:</strong> Use aloe vera or moisturizer</li>
+              <li><strong>Bandage loosely:</strong> Use sterile, non-stick gauze</li>
+              <li><strong>Take pain reliever:</strong> If needed for pain</li>
+            </ol>
+          </div>
+          
+          <div class="guide-note">
+            <p>Note: Seek emergency care for major burns, burns that cover large areas, or burns on the face, hands, feet, genitals, or major joints.</p>
+          </div>
+          
+          <div class="guide-actions">
+            <a href="tel:112" class="primary-action">Call Emergency</a>
+            <a href="#" class="secondary-action" onclick="window.print()">Print Guide</a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Guide 6: Allergic Reaction -->
+      <div class="guide-card" data-category="urgent">
+        <div class="guide-header">
+          <div class="guide-icon guide-urgent">
+            <i class="fas fa-allergies"></i>
+          </div>
+          <h3 class="guide-title">Severe Allergic Reaction (Anaphylaxis)</h3>
+          <span class="guide-badge badge-urgent">Urgent</span>
+        </div>
+        <div class="guide-content">
+          <p class="guide-description">Anaphylaxis is a severe, potentially life-threatening allergic reaction that requires immediate emergency treatment.</p>
+          
+          <div class="guide-steps">
+            <h4><i class="fas fa-list-ol"></i> Follow These Steps:</h4>
+            <ol>
+              <li><strong>Call emergency services:</strong> Dial 112 immediately</li>
+              <li><strong>Use epinephrine autoinjector:</strong> If available (EpiPen, Auvi-Q, etc.)</li>
+              <li><strong>Help the person lie down:</strong> Raise their legs if possible and loosen tight clothing</li>
+              <li><strong>Check breathing and pulse:</strong> Be prepared to perform CPR if necessary</li>
+              <li><strong>Additional dose:</strong> If symptoms persist after 5-15 minutes and a second autoinjector is available, use it</li>
+            </ol>
+          </div>
+          
+          <div class="guide-note">
+            <p>Note: Common symptoms include hives, swelling, difficulty breathing, rapid heartbeat, and confusion. Don't wait to see if symptoms improve.</p>
+          </div>
+          
+          <div class="guide-actions">
+            <a href="tel:112" class="primary-action">Call Emergency</a>
+            <a href="#" class="secondary-action" onclick="window.print()">Print Guide</a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Guide 7: Recovery Position -->
+      <div class="guide-card" data-category="basic">
+        <div class="guide-header">
+          <div class="guide-icon guide-basic">
+            <i class="fas fa-bed"></i>
+          </div>
+          <h3 class="guide-title">Recovery Position</h3>
+          <span class="guide-badge badge-important">Important</span>
+        </div>
+        <div class="guide-content">
+          <p class="guide-description">The recovery position helps maintain an open airway for an unconscious person who is breathing normally. It prevents choking and aspiration.</p>
+          
+          <div class="guide-steps">
+            <h4><i class="fas fa-list-ol"></i> Follow These Steps:</h4>
+            <ol>
+              <li><strong>Check responsiveness and breathing:</strong> Make sure the person is breathing normally</li>
+              <li><strong>Position the arm:</strong> Place their arm nearest to you at a right angle to their body, elbow bent with palm up</li>
+              <li><strong>Prepare to roll:</strong> Bring their far arm across their chest, and hold the back of their hand against their cheek on your side</li>
+              <li><strong>Position the leg:</strong> Bend their far knee up at a right angle</li>
+              <li><strong>Roll onto side:</strong> Pull on the bent knee to roll them toward you onto their side</li>
+              <li><strong>Adjust final position:</strong> Tilt the head back to ensure the airway remains open</li>
+            </ol>
+          </div>
+          
+          <div class="guide-note">
+            <p>Note: Only put someone in the recovery position if they are breathing normally. If they are not breathing, perform CPR.</p>
+          </div>
+          
+          <div class="guide-actions">
+            <a href="tel:112" class="primary-action">Call Emergency</a>
+            <a href="#" class="secondary-action" onclick="window.print()">Print Guide</a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Guide 8: Fractures & Sprains -->
+      <div class="guide-card" data-category="basic">
+        <div class="guide-header">
+          <div class="guide-icon guide-basic">
+            <i class="fas fa-bone"></i>
+          </div>
+          <h3 class="guide-title">Fractures & Sprains</h3>
+          <span class="guide-badge badge-important">Important</span>
+        </div>
+        <div class="guide-content">
+          <p class="guide-description">Immediate care for suspected broken bones or sprains can help prevent further injury and reduce pain and swelling.</p>
+          
+          <div class="guide-steps">
+            <h4><i class="fas fa-list-ol"></i> Follow These Steps:</h4>
+            <ol>
+              <li><strong>Stop any activity:</strong> Prevent further injury</li>
+              <li><strong>R - Rest:</strong> Avoid putting weight on the injured area</li>
+              <li><strong>I - Ice:</strong> Apply ice wrapped in a thin cloth for 20 minutes several times a day</li>
+              <li><strong>C - Compression:</strong> Use an elastic bandage to reduce swelling</li>
+              <li><strong>E - Elevation:</strong> Raise the injured area above heart level when possible</li>
+              <li><strong>Immobilize:</strong> Use a splint or sling if available</li>
+            </ol>
+          </div>
+          
+          <div class="guide-note">
+            <p>Note: Seek medical attention for significant pain, swelling, deformity, inability to bear weight, or if you hear a snap, grinding, or popping sound.</p>
+          </div>
+          
+          <div class="guide-actions">
+            <a href="tel:112" class="primary-action">Call Emergency</a>
+            <a href="#" class="secondary-action" onclick="window.print()">Print Guide</a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Print button -->
+      <button class="print-button" onclick="window.print()" title="Print All Guides">
+        <i class="fas fa-print"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <span class="footer-logo">❤️</span>
+          <span class="footer-brand-text">HealthMate AI</span>
+        </div>
+        <div class="footer-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Contact Us</a>
+        </div>
+      </div>
+      <div class="copyright">
+        <p>&copy; 2025 HealthMate AI. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Improved sidebar toggle function
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.querySelector('.sidebar-overlay');
+      
+      if (sidebar.classList.contains('open')) {
+        // Close sidebar
+        sidebar.classList.remove('open');
+        overlay.classList.remove('active');
+        document.body.classList.remove('no-scroll');
+      } else {
+        // Open sidebar
+        sidebar.classList.add('open');
+        overlay.classList.add('active');
+        document.body.classList.add('no-scroll');
+      }
+      
+      // Accessibility
+      const navToggle = document.querySelector('.nav-toggle');
+      const isExpanded = sidebar.classList.contains('open');
+      navToggle.setAttribute('aria-expanded', isExpanded);
+    }
+    
+    // Add touch swipe to close sidebar
+    document.addEventListener('DOMContentLoaded', function() {
+      // Handle swipe to close sidebar
+      let touchStartX = 0;
+      let touchEndX = 0;
+      
+      const sidebar = document.getElementById('sidebar');
+      
+      sidebar.addEventListener('touchstart', function(e) {
+        touchStartX = e.changedTouches[0].screenX;
+      }, false);
+      
+      sidebar.addEventListener('touchend', function(e) {
+        touchEndX = e.changedTouches[0].screenX;
+        
+        // Detect left swipe (to close sidebar)
+        if (touchStartX - touchEndX > 50) {
+          if (sidebar.classList.contains('open')) {
+            toggleSidebar();
+          }
+        }
+      }, false);
+      
+      // Filter functionality
+      const filterButtons = document.querySelectorAll('.filter-button');
+      const guideCards = document.querySelectorAll('.guide-card');
+      
+      filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          // Remove active class from all buttons
+          filterButtons.forEach(btn => btn.classList.remove('active'));
+          
+          // Add active class to clicked button
+          this.classList.add('active');
+          
+          const filter = this.getAttribute('data-filter');
+          
+          // Show/hide cards based on filter
+          guideCards.forEach(card => {
+            if (filter === 'all' || card.getAttribute('data-category') === filter) {
+              card.style.display = 'flex';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        });
+      });
+    });
+  </script>
+</body>
+</html>

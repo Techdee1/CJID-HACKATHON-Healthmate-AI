@@ -161,24 +161,49 @@ function createSidebarOverlay() {
   }
 }
 
-// Function to toggle sidebar
+// Function to toggle sidebar visibility
 function toggleSidebar() {
   const sidebar = document.getElementById('sidebar');
   const overlay = document.querySelector('.sidebar-overlay');
+  const toggleButton = document.querySelector('.nav-toggle');
   
-  sidebar.classList.toggle('open');
+  // Toggle sidebar visibility
+  if (sidebar) {
+    sidebar.classList.toggle('open');
+  }
   
+  // Toggle overlay
   if (overlay) {
     overlay.classList.toggle('active');
   }
   
-  // Prevent scrolling when sidebar is open
+  // Toggle aria-expanded attribute for accessibility
+  if (toggleButton) {
+    const isExpanded = toggleButton.getAttribute('aria-expanded') === 'true';
+    toggleButton.setAttribute('aria-expanded', !isExpanded);
+  }
+  
+  // Prevent body scrolling when sidebar is open
   document.body.classList.toggle('no-scroll');
 }
 
-// Run on page load
-document.addEventListener('DOMContentLoaded', () => {
-  createSidebarOverlay();
+// Add event listeners when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+  // Close sidebar when clicking on overlay
+  const overlay = document.querySelector('.sidebar-overlay');
+  if (overlay) {
+    overlay.addEventListener('click', toggleSidebar);
+  }
+  
+  // Close sidebar when pressing Escape key
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+      const sidebar = document.getElementById('sidebar');
+      if (sidebar && sidebar.classList.contains('open')) {
+        toggleSidebar();
+      }
+    }
+  });
   
   // Handle back buttons
   const backButtons = document.querySelectorAll('.back-button');
@@ -187,6 +212,9 @@ document.addEventListener('DOMContentLoaded', () => {
       window.history.back();
     });
   });
+
+  // Create sidebar overlay if it doesn't exist
+  createSidebarOverlay();
 });
 
 // Initial load of quiz question if elements are present
