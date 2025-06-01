@@ -1,6 +1,6 @@
 # HealthMate AI 🩺🤖
 
-**Live Site:** [https://frontend-rosy-seven-17.vercel.app/)
+**Live Site:** https://frontend-rosy-seven-17.vercel.app/
 
 ## 📖 Overview
 
