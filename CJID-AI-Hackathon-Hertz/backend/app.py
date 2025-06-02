@@ -27,12 +27,12 @@ translation_spec.loader.exec_module(translation_module)
 translate_to_language = translation_module.translate_to_language
 translate_to_english = translation_module.translate_to_english
 
-# Configure logging
+# Configure logging - REMOVED FileHandler
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler("healthmate.log"),
+        # FileHandler removed to prevent filesystem write errors on Vercel
         logging.StreamHandler()
     ]
 )
@@ -41,7 +41,19 @@ logging.basicConfig(
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+
+# Configure CORS to allow requests from both local and deployed frontend
+CORS(app, resources={
+    r"/api/*": {
+        "origins": [
+            "http://localhost:5000",
+            "http://127.0.0.1:5000",
+            "http://localhost:5500",
+            "http://127.0.0.1:5500",  # Add this line for your local frontend server
+            "https://frontend-rosy-seven-17.vercel.app"
+        ]
+    }
+})
 
 @app.route('/api/health/analyze', methods=['POST'])
 def analyze_health_query():
