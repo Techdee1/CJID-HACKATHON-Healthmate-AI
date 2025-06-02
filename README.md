@@ -19,7 +19,7 @@ This project aims to promote early awareness, discourage harmful self-medication
 ## 🚀 Tech Stack
 
 * **Frontend:** HTML, CSS, JavaScript
-* **Backend:** Node.js, Express
+* **Backend:** Flask, Node.js
 * **AI Engine:** Python (symptom analysis + health content generation)
 * **Deployment:** Vercel (Frontend), Local/Render (Backend & AI)
 
