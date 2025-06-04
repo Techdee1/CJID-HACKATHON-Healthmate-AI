@@ -1,6 +1,56 @@
 // API base URL - change to your local server address for testing
 const API_BASE_URL = 'https://cjid-healthmate-ai-2.onrender.com';
 
+// Function to generate citations HTML with collapsible interface
+function generateCitationsHTML(citations) {
+  if (!citations || citations.length === 0) {
+    return '';
+  }
+  
+  // Generate a unique ID for this citations block
+  const citationId = 'ref-list-' + Math.random().toString(36).substr(2, 9);
+  
+  let html = `
+    <div class="citations-section">
+      <button class="references-toggle" aria-expanded="false" aria-controls="${citationId}">
+        <span class="toggle-label">
+          <i class="fas fa-book-medical"></i>
+          <span>View Citations</span>
+        </span>
+        <i class="fas fa-chevron-down toggle-icon"></i>
+      </button>
+      <div class="references-content" id="${citationId}">
+        <ul>
+  `;
+  
+  citations.forEach(citation => {
+    html += `
+      <li>
+        <a href="${citation.url}" target="_blank" rel="noopener">${citation.title}</a>
+      </li>
+    `;
+  });
+  
+  html += '</ul></div></div>';
+  return html;
+}
+
+// Function to extract citations from API response
+function extractCitations(responseText) {
+  const citations = [];
+  const citationRegex = /For more information: \[(.*?)\]\((https?:\/\/[^\s)]+)\)/g;
+  let match;
+  
+  while ((match = citationRegex.exec(responseText)) !== null) {
+    citations.push({
+      title: match[1],
+      url: match[2]
+    });
+  }
+  
+  return citations;
+}
+
 // Update the checkSymptoms function to work with the new HTML structure
 async function checkSymptoms() {
   const input = document.getElementById("symptomInput");
@@ -53,15 +103,31 @@ async function checkSymptoms() {
         `;
       }
       
-      // Update the results area with the AI response
+      // Extract citations from the response
+      const responseText = data.response;
+      const citations = extractCitations(responseText);
+      
+      // Remove citation text from the main response
+      let cleanedResponse = responseText;
+      const citationRegex = /For more information: \[(.*?)\]\((https?:\/\/[^\s)]+)\)/g;
+      cleanedResponse = cleanedResponse.replace(citationRegex, '');
+      
+      // Generate citations HTML
+      const citationsHTML = generateCitationsHTML(citations);
+      
+      // Update the results area
       resultsDiv.innerHTML = `
         <h3>Analysis Results</h3>
-        <div class="result-summary">${data.response}</div>
+        <div class="result-summary">${cleanedResponse.trim()}</div>
         <div class="detection-tags">
           ${symptomsHtml}
           ${durationHtml}
         </div>
+        ${citationsHTML}
       `;
+      
+      // Add event listener for the new citations toggle
+      setupCitationsToggle();
     } else {
       resultsDiv.innerHTML = `
         <h3>Analysis Error</h3>
@@ -75,6 +141,27 @@ async function checkSymptoms() {
       <p class="result-summary">Network error. Please check your connection and try again.</p>
     `;
   }
+}
+
+// Function to set up the citations toggle behavior
+function setupCitationsToggle() {
+  // Get all citation toggle buttons that don't already have listeners
+  const toggles = document.querySelectorAll('.references-toggle:not([data-listener])');
+  
+  toggles.forEach(toggle => {
+    // Mark as having a listener to avoid duplicates
+    toggle.setAttribute('data-listener', 'true');
+    
+    toggle.addEventListener('click', function() {
+      const content = this.nextElementSibling;
+      const expanded = this.getAttribute('aria-expanded') === 'true';
+      
+      // Toggle expanded state
+      this.setAttribute('aria-expanded', !expanded);
+      content.classList.toggle('expanded');
+      content.hidden = expanded;
+    });
+  });
 }
 
 const quizData = [
@@ -215,9 +302,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Create sidebar overlay if it doesn't exist
   createSidebarOverlay();
+  
+  // Set up any existing citation toggles
+  setupCitationsToggle();
 });
 
 // Initial load of quiz question if elements are present
 if (document.getElementById('question') && document.getElementById('options')) {
   loadQuestion();
 }
+
