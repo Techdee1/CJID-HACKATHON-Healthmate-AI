@@ -576,7 +576,7 @@ body {
 
 /* Adjust main content spacing */
 .screen {
-  margin-top: 80px; /* Account for fixed header */
+  margin-top: 150px; /* Account for fixed header */
   padding-top: 1rem;
 }
 
@@ -594,7 +594,7 @@ body {
   
   /* Adjust spacing for the main content */
   .screen {
-    margin-top: 70px;
+    margin-top: 100px;
   }
   
   /* Hide disclaimer text on smaller screens */

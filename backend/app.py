@@ -50,7 +50,15 @@ CORS(app, resources={
             "http://127.0.0.1:5000",
             "http://localhost:5500",
             "http://127.0.0.1:5500",  # Add this line for your local frontend server
-            "https://frontend-rosy-seven-17.vercel.app"
+            "https://frontend-rosy-seven-17.vercel.app",
+            "https://cjid-healthmate-ai-2-poct.vercel.app",
+            "https://frontend-use.vercel.app",
+            "http://127.0.0.1:19999", # From your log
+            "http://10.204.0.208:19999", # From your log
+            "http://127.0.0.1:10000",
+            "http://10.204.201.13:10000",
+            "http://10.204.138.100:10000",
+            "https://cjid-healthmate-ai-2.onrender.com"
         ]
     }
 })

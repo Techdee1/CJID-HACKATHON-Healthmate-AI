@@ -1,5 +1,5 @@
 // API base URL - change to your local server address for testing
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = 'https://cjid-healthmate-ai-2.onrender.com';
 
 // Cache management
 const CACHE_DURATION = 60 * 60 * 1000; // 1 hour in milliseconds

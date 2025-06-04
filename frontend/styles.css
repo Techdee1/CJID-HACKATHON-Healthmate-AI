@@ -110,12 +110,12 @@ button:hover, .button:hover {
   padding: 20px;
 }
 
-.nav-links {
+/* .nav-links {
   display: flex;
   justify-content: space-around;
   /* Added margin-right for spacing between main nav links */
-  gap: 15px; /* Modern way to add space between flex items */
-}
+  /* gap: 15px; Modern way to add space between flex items */
+/* }  */
 
 /* -------- Input -------- */
 textarea, input[type="text"] {
@@ -326,6 +326,9 @@ canvas {
   
   .topic-selector h3 {
     margin-right: 15px;
+  }
+  .nav-links {
+  display: none; /* This is the default for smaller screens in your homepage styles */
   }
 }
 

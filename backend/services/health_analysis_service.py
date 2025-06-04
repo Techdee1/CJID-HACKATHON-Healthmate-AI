@@ -1,9 +1,11 @@
+import httpx # Import httpx
 import os
 import sys
 import requests
 import uuid
 import json
-import openai
+# import openai
+from openai import OpenAI
 from dotenv import load_dotenv
 from azure.core.credentials import AzureKeyCredential
 from azure.ai.textanalytics import TextAnalyticsClient
@@ -22,7 +24,7 @@ AZURE_LANGUAGE_KEY = os.getenv("AZURE_HEALTH_KEY")
 AZURE_LANGUAGE_ENDPOINT = os.getenv("AZURE_HEALTH_ENDPOINT")
 
 # OpenAI configuration
-openai.api_key = os.getenv("OPENAI_API_KEY")
+# openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # Supported languages
 SUPPORTED_LANGUAGES = {
@@ -38,7 +40,7 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler("healthmate.log"),
+        # logging.FileHandler("healthmate.log"),
         logging.StreamHandler()
     ]
 )
@@ -213,8 +215,11 @@ def process_with_openai(text, health_analysis):
     """
     
     try:
+        # Explicitly create an httpx client with no proxy settings
+        # This overrides any environment variables that might be setting proxies
+        http_client = httpx.Client(proxies=None)
         # New OpenAI API format (v1.0.0+)
-        client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         response = client.chat.completions.create(
             model="gpt-4",
             messages=[
@@ -247,7 +252,7 @@ def generate_health_facts(topic="general health", count=5):
         """
         
         # Initialize OpenAI client
-        client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         
         # Generate response
         response = client.chat.completions.create(

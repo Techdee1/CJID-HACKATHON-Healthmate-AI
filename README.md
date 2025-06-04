@@ -1,6 +1,6 @@
 # HealthMate AI 🩺🤖
 
-**Live Site:** https://cjid-healthmate-ai-2-poct.vercel.app/
+**Live Site:** [https://frontendhealthmate.vercel.app/](https://frontendhealthmate.vercel.app/)
 
 ## 📖 Overview
 
@@ -19,7 +19,7 @@ This project aims to promote early awareness, discourage harmful self-medication
 ## 🚀 Tech Stack
 
 * **Frontend:** HTML, CSS, JavaScript
-* **Backend:** Flask, Node.js
+* **Backend:** Node.js, Express
 * **AI Engine:** Python (symptom analysis + health content generation)
 * **Deployment:** Vercel (Frontend), Local/Render (Backend & AI)
 
