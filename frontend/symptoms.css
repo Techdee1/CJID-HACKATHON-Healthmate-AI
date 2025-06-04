@@ -612,3 +612,131 @@ body {
 body.no-scroll {
   overflow: hidden;
 }
+
+/* Citations Section */
+.citations-section {
+  margin-top: 18px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  background-color: white;
+  border: 1px solid #eaecef;
+  transition: all 0.2s ease;
+}
+
+.references-toggle {
+  width: 100%;
+  padding: 12px 16px;
+  background-color: #f8f9fa;
+  border: none;
+  text-align: left;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--primary);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s ease;
+  font-family: 'Inter', sans-serif;
+}
+
+.references-toggle:hover {
+  background-color: #f1f4f7;
+}
+
+.references-toggle:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(45, 179, 111, 0.2);
+}
+
+.references-toggle .toggle-icon {
+  color: var(--primary);
+  font-size: 0.8rem;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  margin-left: 8px;
+}
+
+.references-toggle[aria-expanded="true"] .toggle-icon {
+  transform: rotate(180deg);
+}
+
+.references-toggle .toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.references-toggle .toggle-label i {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: var(--primary-bg);
+  color: var(--primary);
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+/* Color swap when expanded */
+.references-toggle[aria-expanded="true"] .toggle-label i {
+  background-color: var(--primary);
+  color: white;
+}
+
+.references-content {
+  padding: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+  background-color: white;
+  border-top: 1px solid transparent;
+}
+
+.references-content.expanded {
+  padding: 14px 16px;
+  max-height: 300px;
+  border-top: 1px solid #eaecef;
+}
+
+.references-content ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.references-content li {
+  margin-bottom: 8px;
+}
+
+.references-content li:last-child {
+  margin-bottom: 0;
+}
+
+.references-content a {
+  color: #0277BD;
+  text-decoration: none;
+  display: inline-block;
+  padding: 2px 0;
+  font-size: 0.85rem;
+  transition: color 0.2s, transform 0.2s;
+  position: relative;
+}
+
+.references-content a:hover {
+  color: var(--primary);
+  transform: translateX(2px);
+}
+
+.references-content a:hover::before {
+  content: "→";
+  position: absolute;
+  left: -15px;
+  opacity: 0;
+  animation: fadeIn 0.3s forwards;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}

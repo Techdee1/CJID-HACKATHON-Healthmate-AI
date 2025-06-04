@@ -387,7 +387,7 @@ function createContentCard(item) {
   // Set background color based on category
   const headerColor = item.color || getColorForCategory(item.category);
   
-  // Add translated badge if content is translated
+  // Create translated badge with better visual separation
   const translatedBadge = item.translated ? 
       `<span class="translated-badge">${getLanguageName(currentLanguage)}</span>` : '';
   
@@ -399,6 +399,7 @@ function createContentCard(item) {
     <div class="card-body">
       <h3 class="card-title">${item.title} ${translatedBadge}</h3>
       <p class="card-content">${item.content}</p>
+      ${renderCitations(item.citations)}
       <div class="card-actions">
         <button class="share-btn" onclick="shareContent(this)">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -413,6 +414,63 @@ function createContentCard(item) {
   `;
   
   return card;
+}
+
+// Render citations for an article
+function renderCitations(citations) {
+  if (!citations || citations.length === 0) {
+    return '';
+  }
+  
+  // Generate a unique ID for this citations block
+  const citationId = 'citation-' + Math.random().toString(36).substr(2, 9);
+  
+  let citationsHtml = `
+    <div class="citations-footer">
+      <button class="references-toggle" aria-expanded="false" aria-controls="${citationId}">
+        <span class="toggle-label">
+          <i class="fas fa-book-medical"></i>
+          <span>View Citations</span>
+        </span>
+        <i class="fas fa-chevron-down toggle-icon"></i>
+      </button>
+      <div class="references-content" id="${citationId}">
+        <ul>
+  `;
+  
+  citations.forEach(citation => {
+    citationsHtml += `<li><a href="${citation.url}" target="_blank" rel="noopener">${citation.title}</a></li>`;
+  });
+  
+  citationsHtml += '</ul></div></div>';
+  return citationsHtml;
+}
+
+// Add this to the document ready function
+document.addEventListener('DOMContentLoaded', function() {
+  // Existing initialization code...
+  
+  // Set up citations toggle functionality
+  setupCitationsToggle();
+});
+
+// Add this new function to handle citations toggling
+function setupCitationsToggle() {
+  // Use event delegation since cards are added dynamically
+  document.addEventListener('click', function(event) {
+    if (event.target.closest('.references-toggle')) {
+      const toggle = event.target.closest('.references-toggle');
+      const content = toggle.nextElementSibling;
+      
+      // Toggle expanded state
+      const expanded = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', !expanded);
+      
+      // Toggle visibility of content
+      content.classList.toggle('expanded');
+      content.hidden = expanded;
+    }
+  });
 }
 
 // Get a color for a category - Fixed implementation
@@ -518,7 +576,10 @@ function getColorForCategory(category) {
 // Share content function
 function shareContent(button) {
   const card = button.closest('.awareness-card');
-  const title = card.querySelector('.card-title').textContent.replace(/\s*\w+\s*$/, ''); // Remove language badge
+  const titleElement = card.querySelector('.card-title');
+  
+  // Get just the title text, ignoring the badge
+  const title = titleElement.childNodes[0].textContent.trim();
   const content = card.querySelector('.card-content').textContent;
   const category = card.querySelector('.card-header span').textContent;
   

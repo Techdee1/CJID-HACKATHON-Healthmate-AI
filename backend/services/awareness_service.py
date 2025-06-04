@@ -39,6 +39,22 @@ HEALTH_CATEGORIES = [
 FALLBACK_CONTENT = {
     "Nutrition": [
         {
+            "title": "Importance of Hydration",
+            "content": "Drinking adequate water is essential for overall health. Aim for 8 glasses daily, and more during hot weather or physical activity. Water helps transport nutrients, regulate body temperature, and remove waste. Dehydration can cause headaches, fatigue, and reduced cognitive function.",
+            "category": "Nutrition",
+            "color": "#4CAF50",
+            "citations": [
+                {
+                    "title": "WHO: Water, Sanitation and Health",
+                    "url": "https://www.who.int/health-topics/water-sanitation-and-hygiene"
+                },
+                {
+                    "title": "CDC: Water & Nutrition",
+                    "url": "https://www.cdc.gov/healthywater/drinking/nutrition/index.html"
+                }
+            ]
+        },
+        {
             "title": "The Importance of Balanced Diet",
             "content": "A balanced diet provides essential nutrients needed for good health. Include fruits, vegetables, whole grains, lean proteins, and healthy fats in your daily meals. Aim for variety and moderation to ensure you get all necessary vitamins and minerals. Proper nutrition supports immune function, energy levels, and overall wellbeing.",
             "category": "Nutrition",
@@ -131,8 +147,9 @@ def generate_awareness_content(category, count=3):
         2. Informative content (100-150 words) with practical advice
         3. Make the content culturally sensitive and appropriate for diverse populations
         4. Ensure medical accuracy and avoid overly technical language
+        5. Include 2 citations from reputable sources (e.g., WHO, CDC, medical journals)
         
-        Format as a JSON array with objects containing 'title' and 'content' fields.
+        Format as a JSON array with objects containing 'title', 'content', and 'citations' fields.
         """
         
         # Initialize OpenAI client
@@ -179,7 +196,8 @@ def generate_awareness_content(category, count=3):
                 "title": article.get("title", "Health Tips"),
                 "content": article.get("content", "Information not available"),
                 "category": category,
-                "color": get_color_for_category(category)
+                "color": get_color_for_category(category),
+                "citations": article.get("citations", [])
             })
         
         # Cache the results
