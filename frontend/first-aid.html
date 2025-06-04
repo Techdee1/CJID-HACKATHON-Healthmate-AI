@@ -465,6 +465,145 @@
     body.no-scroll {
       overflow: hidden;
     }
+
+    /* Add to existing styles */
+    .guide-citations {
+      margin-top: 18px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      background-color: white;
+      border: 1px solid #eaecef;
+      transition: all 0.2s ease;
+    }
+    
+    .references-toggle {
+      width: 100%;
+      padding: 12px 16px;
+      background-color: #f8f9fa;
+      border: none;
+      text-align: left;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--primary);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.2s ease;
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .references-toggle:hover {
+      background-color: #f1f4f7;
+    }
+    
+    .references-toggle:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(45, 179, 111, 0.2);
+    }
+    
+    .references-toggle .toggle-icon {
+      color: var(--primary);
+      font-size: 0.8rem;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      margin-left: 8px;
+    }
+    
+    .references-toggle[aria-expanded="true"] .toggle-icon {
+      transform: rotate(180deg);
+    }
+    
+    .references-toggle .toggle-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .references-toggle .toggle-label i {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background-color: var(--primary-bg);
+      color: var(--primary);
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+    
+    /* Color swap when expanded */
+    .references-toggle[aria-expanded="true"] .toggle-label i {
+      background-color: var(--primary);
+      color: white;
+    }
+    
+    .references-content {
+      padding: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+      background-color: white;
+      border-top: 1px solid transparent;
+    }
+    
+    .references-content.expanded {
+      padding: 14px 16px;
+      max-height: 300px;
+      border-top: 1px solid #eaecef;
+    }
+    
+    .references-content ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+    
+    .references-content li {
+      margin-bottom: 8px;
+    }
+    
+    .references-content li:last-child {
+      margin-bottom: 0;
+    }
+    
+    .references-content a {
+      color: #0277BD;
+      text-decoration: none;
+      display: inline-block;
+      padding: 2px 0;
+      font-size: 0.85rem;
+      transition: color 0.2s, transform 0.2s;
+      position: relative;
+    }
+    
+    .references-content a:hover {
+      color: var(--primary);
+      transform: translateX(2px);
+    }
+    
+    .references-content a:hover::before {
+      content: "→";
+      position: absolute;
+      left: -15px;
+      opacity: 0;
+      animation: fadeIn 0.3s forwards;
+    }
+    
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+      .references-toggle {
+        padding: 10px 14px;
+      }
+      
+      .references-content.expanded {
+        padding: 12px 14px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -489,6 +628,7 @@
       <a href="awareness.html">Awareness</a>
       <a href="first-aid.html" class="active">First Aid</a>
       <a href="chat.html">Chat</a>
+      <a href="history.html">History</a>
     </nav>
     
     <!-- Mobile menu toggle button -->
@@ -513,6 +653,7 @@
       <a href="awareness.html"><i class="fas fa-book-medical"></i> Awareness</a>
       <a href="first-aid.html"><i class="fas fa-first-aid"></i>First Aid</a>
       <a href="chat.html"><i class="fas fa-comment-medical"></i> Chat</a>
+      <a href="history.html"><i class="fas fa-chart-line"></i> History</a>
     </nav>
     <div class="sidebar-footer">
       <div class="user-info">
@@ -571,6 +712,35 @@
             <p>Note: Hands-only CPR (compression without rescue breaths) is recommended for untrained bystanders.</p>
           </div>
           
+          <div class="guide-citations">
+            <button class="references-toggle" aria-expanded="false" aria-controls="ref-list-1">
+              <span class="toggle-label">
+                <i class="fas fa-book-medical"></i>
+                <span>View Citations</span>
+              </span>
+              <i class="fas fa-chevron-down toggle-icon"></i>
+            </button>
+            <div class="references-content">
+              <ul>
+                <li>
+                  <a href="https://www.who.int/news-room/fact-sheets/detail/cardiovascular-diseases-(cvds)" target="_blank">
+                    WHO: Cardiovascular Diseases Fact Sheet
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.heart.org/en/cpr" target="_blank">
+                    American Heart Association: CPR Guidelines
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.redcross.org/take-a-class/cpr" target="_blank">
+                    Red Cross: CPR Training
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          
           <div class="guide-actions">
             <a href="tel:112" class="primary-action">Call Emergency</a>
             <a href="#" class="secondary-action" onclick="window.print()">Print Guide</a>
@@ -605,6 +775,35 @@
             <p>Note: If the person becomes unconscious, lower them to the ground, call emergency services, and begin CPR.</p>
           </div>
           
+          <div class="guide-citations">
+            <button class="references-toggle" aria-expanded="false" aria-controls="ref-list-2">
+              <span class="toggle-label">
+                <i class="fas fa-book-medical"></i>
+                <span>View Citations</span>
+              </span>
+              <i class="fas fa-chevron-down toggle-icon"></i>
+            </button>
+            <div class="references-content">
+              <ul>
+                <li>
+                  <a href="https://www.redcross.org/take-a-class/cpr/performing-cpr/choking-emergencies" target="_blank">
+                    Red Cross: Choking Emergencies
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.mayoclinic.org/first-aid/first-aid-choking/basics/art-20056637" target="_blank">
+                    Mayo Clinic: Choking First Aid
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.who.int/news-room/fact-sheets/detail/injuries" target="_blank">
+                    WHO: Injuries Prevention
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          
           <div class="guide-actions">
             <a href="tel:112" class="primary-action">Call Emergency</a>
             <a href="#" class="secondary-action" onclick="window.print()">Print Guide</a>
@@ -636,6 +835,35 @@
           
           <div class="guide-note">
             <p>Note: Other symptoms may include sudden numbness, confusion, trouble seeing, difficulty walking, or severe headache.</p>
+          </div>
+          
+          <div class="guide-citations">
+            <button class="references-toggle" aria-expanded="false" aria-controls="ref-list-3">
+              <span class="toggle-label">
+                <i class="fas fa-book-medical"></i>
+                <span>View Citations</span>
+              </span>
+              <i class="fas fa-chevron-down toggle-icon"></i>
+            </button>
+            <div class="references-content">
+              <ul>
+                <li>
+                  <a href="https://www.who.int/news-room/fact-sheets/detail/the-top-10-causes-of-death" target="_blank">
+                    WHO: Top Causes of Death
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.stroke.org/en/about-stroke/stroke-symptoms" target="_blank">
+                    American Stroke Association: Stroke Symptoms
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.ninds.nih.gov/disorders/patient-caregiver-education/preventing-stroke" target="_blank">
+                    National Institute of Neurological Disorders: Stroke Prevention
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
           
           <div class="guide-actions">
@@ -672,6 +900,35 @@
             <p>Note: Always call emergency services for severe bleeding. Do not remove objects embedded in a wound.</p>
           </div>
           
+          <div class="guide-citations">
+            <button class="references-toggle" aria-expanded="false" aria-controls="ref-list-4">
+              <span class="toggle-label">
+                <i class="fas fa-book-medical"></i>
+                <span>View Citations</span>
+              </span>
+              <i class="fas fa-chevron-down toggle-icon"></i>
+            </button>
+            <div class="references-content">
+              <ul>
+                <li>
+                  <a href="https://www.redcross.org/take-a-class/first-aid/performing-first-aid/bleeding-emergencies" target="_blank">
+                    Red Cross: Bleeding Emergencies
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.mayoclinic.org/first-aid/first-aid-severe-bleeding/basics/art-20056661" target="_blank">
+                    Mayo Clinic: Severe Bleeding First Aid
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.stopthebleed.org/training/how-to-stop-the-bleed/" target="_blank">
+                    Stop the Bleed: Training Resources
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          
           <div class="guide-actions">
             <a href="tel:112" class="primary-action">Call Emergency</a>
             <a href="#" class="secondary-action" onclick="window.print()">Print Guide</a>
@@ -706,6 +963,35 @@
             <p>Note: Seek emergency care for major burns, burns that cover large areas, or burns on the face, hands, feet, genitals, or major joints.</p>
           </div>
           
+          <div class="guide-citations">
+            <button class="references-toggle" aria-expanded="false" aria-controls="ref-list-5">
+              <span class="toggle-label">
+                <i class="fas fa-book-medical"></i>
+                <span>View Citations</span>
+              </span>
+              <i class="fas fa-chevron-down toggle-icon"></i>
+            </button>
+            <div class="references-content">
+              <ul>
+                <li>
+                  <a href="https://www.who.int/news-room/fact-sheets/detail/burns" target="_blank">
+                    WHO: Burns Fact Sheet
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.mayoclinic.org/first-aid/first-aid-burns/basics/art-20056649" target="_blank">
+                    Mayo Clinic: Burns First Aid
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.cdc.gov/disasters/burns.html" target="_blank">
+                    CDC: Burn Prevention and First Aid
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          
           <div class="guide-actions">
             <a href="tel:112" class="primary-action">Call Emergency</a>
             <a href="#" class="secondary-action" onclick="window.print()">Print Guide</a>
@@ -738,6 +1024,35 @@
           
           <div class="guide-note">
             <p>Note: Common symptoms include hives, swelling, difficulty breathing, rapid heartbeat, and confusion. Don't wait to see if symptoms improve.</p>
+          </div>
+          
+          <div class="guide-citations">
+            <button class="references-toggle" aria-expanded="false" aria-controls="ref-list-6">
+              <span class="toggle-label">
+                <i class="fas fa-book-medical"></i>
+                <span>View Citations</span>
+              </span>
+              <i class="fas fa-chevron-down toggle-icon"></i>
+            </button>
+            <div class="references-content">
+              <ul>
+                <li>
+                  <a href="https://www.who.int/news-room/fact-sheets/detail/food-allergies" target="_blank">
+                    WHO: Food Allergies
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.aaaai.org/conditions-treatments/allergies/anaphylaxis" target="_blank">
+                    American Academy of Allergy, Asthma & Immunology: Anaphylaxis
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.mayoclinic.org/diseases-conditions/anaphylaxis/symptoms-causes/syc-20351468" target="_blank">
+                    Mayo Clinic: Anaphylaxis
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
           
           <div class="guide-actions">
@@ -775,6 +1090,35 @@
             <p>Note: Only put someone in the recovery position if they are breathing normally. If they are not breathing, perform CPR.</p>
           </div>
           
+          <div class="guide-citations">
+            <button class="references-toggle" aria-expanded="false" aria-controls="ref-list-7">
+              <span class="toggle-label">
+                <i class="fas fa-book-medical"></i>
+                <span>View Citations</span>
+              </span>
+              <i class="fas fa-chevron-down toggle-icon"></i>
+            </button>
+            <div class="references-content">
+              <ul>
+                <li>
+                  <a href="https://www.redcross.org.uk/first-aid/learn-first-aid/unresponsive-and-breathing" target="_blank">
+                    Red Cross UK: Recovery Position
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.stjohn.org.nz/first-aid/first-aid-library/immediate-first-aid/the-recovery-position/" target="_blank">
+                    St John Ambulance: Recovery Position
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.mayoclinic.org/first-aid/first-aid/basics/art-20056574" target="_blank">
+                    Mayo Clinic: First Aid Basics
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          
           <div class="guide-actions">
             <a href="tel:112" class="primary-action">Call Emergency</a>
             <a href="#" class="secondary-action" onclick="window.print()">Print Guide</a>
@@ -808,6 +1152,35 @@
           
           <div class="guide-note">
             <p>Note: Seek medical attention for significant pain, swelling, deformity, inability to bear weight, or if you hear a snap, grinding, or popping sound.</p>
+          </div>
+          
+          <div class="guide-citations">
+            <button class="references-toggle" aria-expanded="false" aria-controls="ref-list-8">
+              <span class="toggle-label">
+                <i class="fas fa-book-medical"></i>
+                <span>View Citations</span>
+              </span>
+              <i class="fas fa-chevron-down toggle-icon"></i>
+            </button>
+            <div class="references-content">
+              <ul>
+                <li>
+                  <a href="https://www.who.int/news-room/fact-sheets/detail/falls" target="_blank">
+                    WHO: Falls Prevention
+                  </a>
+                </li>
+                <li>
+                  <a href="https://orthoinfo.aaos.org/en/diseases--conditions/sprains-strains-and-other-soft-tissue-injuries/" target="_blank">
+                    American Academy of Orthopaedic Surgeons: Sprains and Strains
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.mayoclinic.org/diseases-conditions/broken-ankle/symptoms-causes/syc-20450025" target="_blank">
+                    Mayo Clinic: Fractures
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
           
           <div class="guide-actions">
@@ -913,6 +1286,32 @@
               card.style.display = 'none';
             }
           });
+        });
+      });
+    });
+  </script>
+
+  <script>
+    // Add this to your existing script
+    document.addEventListener('DOMContentLoaded', function() {
+      // Set up references toggles
+      const referenceToggles = document.querySelectorAll('.references-toggle');
+      
+      referenceToggles.forEach((toggle, index) => {
+        // Update the ID to ensure uniqueness
+        const contentId = `ref-list-${index + 1}`;
+        const content = toggle.nextElementSibling;
+        content.id = contentId;
+        toggle.setAttribute('aria-controls', contentId);
+        
+        toggle.addEventListener('click', function() {
+          // Toggle expanded state
+          const expanded = toggle.getAttribute('aria-expanded') === 'true';
+          toggle.setAttribute('aria-expanded', !expanded);
+          
+          // Toggle visibility of content
+          content.classList.toggle('expanded');
+          content.hidden = expanded;
         });
       });
     });
